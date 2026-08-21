@@ -1,0 +1,20 @@
+flowchart LR
+  user[Usuário SaaS] -->|HTTPS| app[Web / Mobile]
+  app -->|Login| cognito[Amazon Cognito]
+  cognito -->|JWT| app
+  app -->|JWT + HTTPS| api[Amazon API Gateway]
+  cognito -. autoriza .-> api
+  api --> lambda[AWS Lambda]
+  lambda -->|Metadados e autorização| ddb[(Amazon DynamoDB)]
+  lambda -->|Gera URL pré-assinada| s3[(Amazon S3)]
+  app ==>|Upload / download direto\nURL pré-assinada| s3
+  kms[AWS KMS] -. criptografia .-> s3
+  kms -. criptografia .-> ddb
+  iam[AWS IAM] -. menor privilégio .-> lambda
+  iam -. políticas .-> s3
+  cw[Amazon CloudWatch] -. logs, métricas e alarmes .-> api
+  cw -. observabilidade .-> lambda
+  cfn[AWS CloudFormation] -. provisiona .-> api
+  cfn -. provisiona .-> lambda
+  cfn -. provisiona .-> ddb
+  cfn -. provisiona .-> s3
