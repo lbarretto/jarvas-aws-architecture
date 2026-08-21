@@ -10,5 +10,6 @@ A arquitetura utiliza Amazon Cognito, API Gateway, AWS Lambda, Amazon S3, Dynamo
 
 - [Documentação da arquitetura e dos fluxos](docs/architecture.md)
 - [Fonte editável do diagrama em Mermaid](docs/architecture.mmd)
+- [Suposição sobre possíveis próximos passos](docs/possible-next-steps.md)
 
 > Este repositório está em evolução. A implementação da infraestrutura como código e das funções serverless será adicionada nas próximas etapas.
