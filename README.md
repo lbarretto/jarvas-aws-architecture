@@ -1,4 +1,4 @@
-# ☁️ Startup XYZ - Plataforma SaaS de Gestão de Documentos com IA
+# ☁️ Startup Jarva's - Plataforma SaaS de Gestão de Documentos com IA
 
 <!-- CAPA DO PROJETO -->
 <p align="center">
