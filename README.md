@@ -2,7 +2,7 @@
 
 <!-- CAPA DO PROJETO -->
 <p align="center">
-  <img src="./assets/cover.png" alt="Capa do projeto Startup XYZ">
+  <img src="./assets/cover.png" alt="Capa do projeto Startup Jarva's">
 </p>
 
 > **Projeto desenvolvido como parte do desafio proposto pela Escola da Nuvem para aplicação prática dos conhecimentos em AWS Cloud e arquitetura de soluções em nuvem.**
@@ -23,15 +23,15 @@
 - [4. Requisitos de projeto e para a solução](#4-requisitos-de-projeto-e-para-a-solução)
 - [5. Solução](#5-solução)
   - [Da necessidade à solução](#da-necessidade-à-solução)
-  - [Arquitetura proposta](#arquitetura-proposta)
+  - [Visão geral da solução](#visão-geral-da-solução)
   - [Serviços AWS utilizados](#serviços-aws-utilizados)
-  - [Jornada do cliente](#jornada-do-cliente)
-  - [AWS Well-Architected Framework e AWS CAF](#aws-well-architected-framework-e-aws-caf)
+  - [Jornada do Cliente](#jornada-do-cliente)
+  - [Arquitetura AWS](#arquitetura-aws)
+  - [Arquitetura, AWS CAF e AWS Well-Architected Framework](#arquitetura-aws-caf-e-aws-well-architected-framework)
   - [Custos do projeto](#custos-do-projeto)
 - [6. Como o projeto foi desenvolvido](#6-como-o-projeto-foi-desenvolvido)
-- [7. Infraestrutura como Código e Guia de Testes](#7-infraestrutura-como-código-e-guia-de-testes)
-  - [Código da infraestrutura](#código-da-infraestrutura)
-  - [Como testar a aplicação](#como-testar-a-aplicação)
+- [7. Infraestrutura como Código](#7-infraestrutura-como-código)
+  - [Guia de como testar a aplicação](#guia-de-como-testar-a-aplicação)
 - [8. Agradecimentos](#8-agradecimentos)
 - [9. Referências](#9-referências)
 
@@ -222,51 +222,159 @@ A infraestrutura deve poder ser recriada de forma consistente, permitindo que a 
 
 # 5. Solução
 
-Nesta seção, apresentaremos como os requisitos identificados ao longo da análise do problema foram traduzidos em decisões arquiteturais e em uma proposta de solução baseada nos serviços da AWS.
-
 ## Da necessidade à solução
 
 A partir desses requisitos, fica claro que o desafio da Startup XYZ não está apenas em armazenar uma grande quantidade de documentos. A arquitetura precisa acompanhar o crescimento da empresa, proteger os dados de cada cliente, preservar o histórico como um ativo estratégico e, ao mesmo tempo, manter os custos sob controle.
 
 É a partir dessas necessidades que chegamos à proposta de arquitetura deste projeto. A escolha dos serviços AWS não parte, portanto, da tecnologia em si, mas dos problemas que precisam ser resolvidos e dos requisitos que a solução precisa atender.
 
-**Nas próximas etapas, apresentamos como esses requisitos foram traduzidos em uma arquitetura AWS, quais serviços foram selecionados e quais decisões técnicas orientaram a construção da solução.**
+A proposta desenvolvida utiliza uma arquitetura **serverless**, baseada em serviços gerenciados da AWS, reduzindo a necessidade de gerenciamento de infraestrutura e permitindo que a solução acompanhe a demanda da plataforma.
 
----
+A arquitetura também separa responsabilidades importantes do sistema: autenticação, controle de acesso, lógica de negócio, armazenamento dos documentos, gerenciamento de metadados, observabilidade, auditoria e provisionamento da infraestrutura.
 
-## Arquitetura proposta
+## Visão geral da solução
 
-> 🚧 **Em desenvolvimento**
->
-> Nesta seção será apresentada a arquitetura técnica da solução desenvolvida para a Startup Jarva's, incluindo o fluxo entre os serviços AWS e as principais decisões arquiteturais adotadas.
+A solução foi projetada para que o cliente possa enviar e acessar documentos sem receber acesso direto e irrestrito ao ambiente de armazenamento.
 
-<!-- INSERIR IMAGEM DA ARQUITETURA AWS -->
+O fluxo começa com a autenticação do usuário por meio do **Amazon Cognito**. Após a autenticação, a aplicação utiliza o token de identidade para realizar solicitações à API, publicada pelo **Amazon API Gateway**.
+
+As solicitações são encaminhadas para funções do **AWS Lambda**, responsáveis por aplicar as regras de negócio e validar se o usuário possui autorização para realizar determinada operação.
+
+Os metadados dos documentos e as informações de propriedade são armazenados no **Amazon DynamoDB**. Dessa forma, antes de permitir operações como consulta, download ou geração de uma URL de acesso, a aplicação pode verificar a relação entre o usuário autenticado e o documento solicitado.
+
+Os arquivos são armazenados em um bucket privado do **Amazon S3**, organizado de acordo com a estrutura definida pela aplicação. O acesso aos objetos ocorre por meio de URLs pré-assinadas e temporárias, geradas somente após a validação das permissões necessárias.
+
+Essa abordagem contribui para o isolamento entre clientes e evita a exposição pública do bucket. O usuário recebe autorização apenas para realizar a operação específica solicitada e dentro de um período limitado.
+
+Para acompanhar o crescimento da base histórica, a solução também utiliza recursos de gerenciamento do ciclo de vida dos dados. Os documentos podem permanecer inicialmente em uma camada adequada ao seu padrão de acesso e, após o período definido pela estratégia de retenção, são movimentados automaticamente para uma camada de armazenamento histórico de menor custo.
+
+Ao mesmo tempo, o **S3 Object Lock** contribui para a preservação dos documentos durante o período de retenção configurado, reforçando o requisito de que o histórico não seja removido ou alterado indevidamente.
+
+O resultado é uma arquitetura que busca equilibrar **segurança, escalabilidade, preservação histórica, experiência do usuário e sustentabilidade dos custos**.
 
 ---
 
 ## Serviços AWS utilizados
 
-> 🚧 **Em desenvolvimento**
->
-> Nesta seção serão apresentados os serviços AWS utilizados na solução, seus respectivos papéis na arquitetura e as justificativas técnicas para suas escolhas.
+| Serviço | Papel na solução |
+|---|---|
+| **Amazon Cognito** | Autenticação e gerenciamento da identidade dos usuários |
+| **Amazon API Gateway** | Camada de entrada da API, validação de solicitações e integração com a lógica da aplicação |
+| **AWS Lambda** | Execução da lógica de negócio, validações e geração de URLs pré-assinadas |
+| **Amazon DynamoDB** | Armazenamento dos metadados e informações de propriedade dos documentos |
+| **Amazon S3** | Armazenamento seguro e durável dos documentos |
+| **S3 Intelligent-Tiering** | Otimização automática da camada de armazenamento de acordo com o padrão de acesso |
+| **S3 Lifecycle** | Gerenciamento do ciclo de vida e transição dos documentos históricos |
+| **S3 Glacier Deep Archive** | Retenção histórica de longo prazo para documentos com menor frequência de acesso |
+| **S3 Object Lock** | Proteção dos objetos contra exclusão ou alteração durante o período de retenção configurado |
+| **S3 Transfer Acceleration** | Otimização da transferência de arquivos entre clientes geograficamente distribuídos e o Amazon S3 |
+| **AWS IAM** | Controle de permissões seguindo o princípio do menor privilégio |
+| **Amazon CloudWatch** | Monitoramento, métricas, logs e acompanhamento operacional |
+| **AWS CloudTrail** | Registro e auditoria das ações realizadas na conta e nos serviços AWS |
+| **AWS CloudFormation** | Provisionamento e reprodução da infraestrutura por meio de código |
 
 ---
 
-## Jornada do cliente
+## Jornada do Cliente
 
-> 🚧 **Em desenvolvimento**
->
-> Esta seção apresentará a jornada do cliente dentro da plataforma, demonstrando o fluxo de utilização da solução desde o acesso inicial até o envio e a consulta dos documentos.
+A arquitetura técnica mostra como os serviços se conectam. Entretanto, para compreender a solução sob a perspectiva de quem utiliza a plataforma, também desenvolvemos uma visão focada na **Jornada do Cliente**.
 
-<!-- INSERIR IMAGEM DA JORNADA DO CLIENTE -->
+Essa jornada representa o caminho percorrido pelo usuário desde o acesso à plataforma até a preservação histórica de seus documentos.
+
+<p align="center">
+  <img width="1536" height="1024" alt="Jornada do Cliente - Plataforma SaaS de Gestão de Documentos com IA" src="https://github.com/user-attachments/assets/205a90b4-dfd8-44de-83bf-c4a7f09828fc" />
+</p>
+
+A jornada foi organizada em três momentos principais:
+
+### 1. Acesso e envio
+
+O cliente acessa a plataforma, realiza sua autenticação e envia um documento para o processamento da aplicação. Nesse momento, o objetivo é proporcionar uma experiência simples ao usuário sem abrir mão da segurança e da identificação correta da propriedade do documento.
+
+### 2. Proteção e utilização
+
+Após o envio, o documento é associado à conta do cliente e armazenado de forma segura. Quando o usuário deseja consultar ou baixar um arquivo, a plataforma verifica sua identidade e suas permissões antes de liberar o acesso.
+
+Dessa forma, o cliente não recebe acesso irrestrito ao ambiente de armazenamento. O acesso é concedido somente ao documento solicitado e de forma controlada.
+
+### 3. Preservação histórica
+
+Com o passar do tempo, os documentos continuam preservados como parte do histórico da empresa. Conforme seu padrão de acesso muda, a estratégia de armazenamento permite otimizar os custos sem perder o histórico que poderá gerar valor para o negócio no futuro.
+
+Essa visão reforça um dos princípios centrais do projeto: **a segurança e a preservação dos dados devem estar presentes durante toda a jornada do cliente, e não apenas no momento do armazenamento**.
 
 ---
 
-## AWS Well-Architected Framework e AWS CAF
+## Arquitetura AWS
 
-> 🚧 **Em desenvolvimento**
->
-> Nesta seção será apresentada a relação entre as decisões adotadas no projeto e os princípios do AWS Well-Architected Framework e do AWS Cloud Adoption Framework (AWS CAF).
+A visão técnica da solução apresenta os serviços AWS utilizados e o fluxo principal de comunicação entre os componentes da arquitetura.
+
+<p align="center">
+  <img width="1536" height="1024" alt="Arquitetura AWS - Plataforma SaaS de Gestão de Documentos com IA" src="https://github.com/user-attachments/assets/a66c13f6-633b-4e12-8084-bc7727b39b90" />
+</p>
+
+O fluxo principal pode ser resumido da seguinte forma:
+
+1. O usuário realiza o login na plataforma utilizando o **Amazon Cognito**.
+2. Após a autenticação, o usuário recebe um token de identidade.
+3. As solicitações são enviadas para o **Amazon API Gateway**, que atua como ponto de entrada da API.
+4. O **AWS Lambda** processa a solicitação e aplica as regras de negócio.
+5. Quando necessário, a função consulta os metadados no **Amazon DynamoDB** para validar a propriedade e a autorização relacionadas ao documento.
+6. Após a validação, a aplicação gera uma URL pré-assinada para a operação solicitada no **Amazon S3**.
+7. O usuário realiza o upload ou download diretamente no S3 utilizando essa autorização temporária.
+8. Os documentos permanecem armazenados em um bucket privado e seguem a estratégia definida para seu ciclo de vida e retenção.
+
+Além do fluxo principal, a arquitetura incorpora mecanismos de observabilidade, auditoria, controle de acesso, otimização de custos e infraestrutura como código.
+
+É importante destacar que serviços como **S3 Lifecycle**, **S3 Intelligent-Tiering**, **S3 Glacier Deep Archive** e **S3 Object Lock** não representam etapas pelas quais uma requisição do usuário necessariamente passa em tempo real. Eles fazem parte da estratégia de gerenciamento e preservação dos dados ao longo de seu ciclo de vida.
+
+---
+
+## Arquitetura, AWS CAF e AWS Well-Architected Framework
+
+A construção da solução também foi orientada por boas práticas de arquitetura em nuvem, considerando princípios presentes no **AWS Cloud Adoption Framework (AWS CAF)** e no **AWS Well-Architected Framework**.
+
+O AWS CAF contribui para analisar a adoção da nuvem de forma mais ampla, considerando aspectos que vão além da tecnologia. No contexto deste projeto, ele ajuda a relacionar a arquitetura às necessidades do negócio, à segurança, à operação e à gestão dos recursos utilizados.
+
+Já o AWS Well-Architected Framework oferece princípios técnicos para avaliar se uma arquitetura está sendo construída de maneira segura, confiável, eficiente e sustentável.
+
+A relação da arquitetura com esses princípios pode ser observada da seguinte forma:
+
+### 🔐 Segurança
+
+O projeto prioriza a autenticação dos usuários, o controle de permissões e a validação da propriedade dos documentos antes da liberação do acesso.
+
+O **Amazon Cognito**, o **AWS IAM**, o **Amazon API Gateway**, o **AWS Lambda** e o uso de URLs pré-assinadas contribuem para que o acesso aos dados seja controlado e limitado às operações autorizadas.
+
+### 📈 Escalabilidade e performance
+
+A utilização de serviços serverless permite que a solução acompanhe a demanda sem depender de uma única máquina responsável pelo processamento das solicitações.
+
+O **Amazon API Gateway**, o **AWS Lambda**, o **Amazon DynamoDB** e o **Amazon S3** oferecem uma base gerenciada para o crescimento da aplicação.
+
+O **S3 Transfer Acceleration** complementa essa estratégia ao otimizar a transferência de arquivos em cenários nos quais os clientes estão geograficamente distribuídos.
+
+### 🛡️ Confiabilidade e preservação
+
+O **Amazon S3** oferece uma base durável para o armazenamento dos documentos, enquanto a estratégia de ciclo de vida permite preservar o histórico ao longo do tempo.
+
+O **S3 Object Lock** reforça a proteção dos objetos contra exclusão ou alteração durante o período de retenção configurado, contribuindo para o requisito de preservação histórica.
+
+### 💰 Otimização de custos
+
+A arquitetura reconhece que documentos recentes e históricos possuem padrões de acesso diferentes.
+
+Por esse motivo, recursos como **S3 Intelligent-Tiering**, **S3 Lifecycle** e **S3 Glacier Deep Archive** fazem parte da estratégia para adequar o armazenamento ao comportamento dos dados e evitar que todo o histórico permaneça em uma camada voltada ao acesso frequente.
+
+Além disso, serviços serverless reduzem a necessidade de manter servidores provisionados e ociosos exclusivamente para suportar a aplicação.
+
+### 📊 Excelência operacional
+
+O **Amazon CloudWatch** permite acompanhar logs, métricas e possíveis alarmes relacionados à operação da solução.
+
+O **AWS CloudTrail** complementa essa visão mantendo registros das ações realizadas, contribuindo para auditoria e governança.
+
+Por fim, o **AWS CloudFormation** permite que a infraestrutura seja provisionada e reproduzida por meio de código, reduzindo inconsistências entre ambientes e facilitando a evolução da arquitetura.
 
 ---
 
@@ -274,7 +382,61 @@ A partir desses requisitos, fica claro que o desafio da Startup XYZ não está a
 
 > 🚧 **Em desenvolvimento**
 >
-> Nesta seção será apresentada uma análise dos custos estimados da solução e das decisões adotadas para equilibrar os requisitos técnicos e a sustentabilidade financeira da arquitetura.
+> Nesta seção serão apresentados os custos estimados da solução, as principais variáveis que influenciam o consumo dos serviços AWS e a estratégia adotada para acompanhar e otimizar os gastos da infraestrutura.
+
+---
+
+## Evolução e Visão de Futuro — Fase 02
+
+A arquitetura apresentada na Fase 01 foi desenvolvida para atender aos principais requisitos do cenário proposto, priorizando segurança, isolamento entre clientes, escalabilidade, retenção dos documentos, otimização de custos, observabilidade e reprodutibilidade da infraestrutura.
+
+Como parte da evolução da solução, identificamos alguns pontos que podem ser aprimorados em uma segunda fase do projeto. Essas melhorias não são necessárias para que a arquitetura inicial atenda aos requisitos definidos, mas representam oportunidades para aumentar o nível de segurança e governança da plataforma conforme o negócio cresça e a quantidade e sensibilidade dos dados aumentem.
+
+### 🔐 Fase 02 — Evolução da Segurança e Governança
+
+A Fase 02 tem como principal objetivo fortalecer a proteção dos dados e o gerenciamento de informações sensíveis, complementando os mecanismos de segurança já presentes na Fase 01.
+
+Os serviços avaliados para esta etapa são:
+
+| Serviço | Objetivo na Fase 02 |
+|---|---|
+| **AWS KMS** | Gerenciamento centralizado de chaves criptográficas e maior controle sobre a proteção dos dados |
+| **AWS Secrets Manager** | Armazenamento e gerenciamento seguro de credenciais, segredos e informações sensíveis utilizadas pela aplicação |
+| **Amazon Macie** | Descoberta e identificação de dados sensíveis armazenados no Amazon S3, apoiando a classificação e a proteção das informações |
+
+A adoção desses serviços deve ser avaliada considerando o crescimento da plataforma, o nível de sensibilidade dos documentos armazenados e o impacto financeiro de sua utilização.
+
+A proposta não é adicionar serviços simplesmente para aumentar a quantidade de componentes da arquitetura. Cada recurso deve ser incorporado quando houver uma necessidade concreta que justifique seu uso, considerando segurança, governança, complexidade operacional e custo.
+
+### 🚀 Como a solução pode evoluir?
+
+A evolução da plataforma pode ser analisada a partir de algumas perguntas importantes:
+
+- Como a solução poderia atender a um volume significativamente maior de usuários e documentos?
+- Como aumentar o nível de proteção dos dados conforme a quantidade e a sensibilidade das informações cresçam?
+- Como identificar e monitorar automaticamente a presença de informações sensíveis nos documentos armazenados?
+- Como melhorar o gerenciamento de credenciais e informações confidenciais utilizadas pela aplicação?
+- Como aumentar o controle sobre as chaves utilizadas para proteger os dados?
+- Como manter o crescimento da plataforma sustentável sem aumentar os custos de forma desproporcional?
+
+A Fase 02 representa, portanto, uma evolução natural da arquitetura, na qual mecanismos adicionais de segurança e governança podem ser incorporados conforme as necessidades do negócio se tornem mais complexas.
+
+### 📈 Visão de futuro
+
+Em um cenário de crescimento da Startup XYZ, a arquitetura poderá evoluir para atender a um volume maior de usuários, documentos e processamento, mantendo os princípios que orientaram a solução desde sua concepção.
+
+Entre as possibilidades de evolução estão:
+
+- **Maior proteção criptográfica:** utilização do AWS KMS para ampliar o controle sobre as chaves criptográficas e os mecanismos de proteção dos dados.
+- **Gestão de informações sensíveis:** utilização do AWS Secrets Manager para centralizar e proteger credenciais e outros segredos utilizados pela aplicação.
+- **Descoberta de dados sensíveis:** utilização do Amazon Macie para identificar e classificar informações potencialmente sensíveis armazenadas no Amazon S3.
+- **Maior governança:** ampliação dos mecanismos de auditoria, monitoramento e controle conforme a plataforma cresça.
+- **Escalabilidade:** evolução da arquitetura para suportar um aumento significativo no número de usuários e documentos sem depender de componentes individuais que limitem o crescimento.
+- **Otimização de custos:** revisão contínua das estratégias de armazenamento e utilização dos serviços conforme o comportamento real da aplicação.
+
+Essas melhorias não precisam necessariamente ser implementadas na primeira versão da solução. O objetivo desta etapa é demonstrar que a arquitetura foi pensada não apenas para atender ao cenário atual, mas também para permitir uma evolução consistente conforme o negócio cresça.
+
+> **A Fase 01 resolve o problema atual. A Fase 02 prepara a arquitetura para os desafios que surgem com o crescimento da plataforma.**
 
 ---
 
@@ -282,35 +444,43 @@ A partir desses requisitos, fica claro que o desafio da Startup XYZ não está a
 
 > 🚧 **Em desenvolvimento**
 >
-> Nesta seção será apresentado o processo de desenvolvimento do projeto, incluindo a organização do time, a divisão das atividades, o processo de tomada de decisão e a gestão do projeto ao longo das diferentes etapas.
+> Nesta seção será apresentada a forma como o projeto foi organizado e desenvolvido pela equipe, incluindo as principais etapas de análise, definição de requisitos, tomada de decisões técnicas e construção da proposta de solução.
 
 ---
 
-# 7. Infraestrutura como Código e Guia de Testes
+# 7. Infraestrutura como Código
 
-## Código da infraestrutura
-
-> 🚧 **Em desenvolvimento**
->
-> A infraestrutura do projeto será provisionada e documentada por meio de Infrastructure as Code (IaC), permitindo maior consistência, reprodutibilidade e facilidade na criação dos recursos necessários.
-
-<!-- INSERIR HYPERLINK PARA O CÓDIGO DA INFRAESTRUTURA -->
-
-## Como testar a aplicação
+A infraestrutura da solução foi planejada para ser reproduzível e consistente entre diferentes ambientes. A utilização de **Infrastructure as Code (IaC)** permite transformar a arquitetura definida no projeto em recursos provisionados por meio de código.
 
 > 🚧 **Em desenvolvimento**
 >
-> Nesta seção será disponibilizado um guia com as instruções necessárias para testar a aplicação e validar os principais fluxos da solução.
+> O código da infraestrutura e sua documentação serão disponibilizados nesta seção.
+
+### 🔗 Acesse o código da infraestrutura
+
+> **[Inserir aqui o hyperlink para o repositório ou diretório contendo o código de Infrastructure as Code]**
+
+---
+
+## Guia de como testar a aplicação
+
+> 🚧 **Em desenvolvimento**
+>
+> Nesta seção será disponibilizado um guia com as instruções necessárias para testar e validar o funcionamento da aplicação.
 
 ---
 
 # 8. Agradecimentos
 
-> 🚧 **Em desenvolvimento**
->
-> Esta seção será dedicada aos agradecimentos às pessoas e instituições que contribuíram para o desenvolvimento deste projeto.
+Este projeto foi construído de forma colaborativa como parte de uma jornada de aprendizado e aplicação prática dos conhecimentos adquiridos durante a preparação em computação em nuvem.
 
-<!-- INSERIR FOTO DO GRUPO -->
+Agradecemos à **Escola da Nuvem**, aos professores, mentores e a todos os integrantes da equipe que contribuíram com análises, ideias e diferentes perspectivas ao longo do desenvolvimento do projeto.
+
+<!-- ESPAÇO RESERVADO PARA FOTO DO GRUPO -->
+
+<p align="center">
+  <em>Foto da equipe em breve.</em>
+</p>
 
 ---
 
@@ -320,43 +490,43 @@ A partir desses requisitos, fica claro que o desafio da Startup XYZ não está a
 
 Configurações de bloqueio de acesso público e como a configuração sobrepõe políticas que liberariam acesso público.
 
-[https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html](https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html)
+https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html
 
 ### 2. Amazon S3 — URLs pré-assinadas
 
 Como gerar URLs temporárias que concedem acesso restrito a um único objeto, sem tornar o bucket público.
 
-[https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html](https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html)
+https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html
 
 ### 3. AWS re:Post (Knowledge Center oficial da AWS) — Acesso por prefixo
 
 Exemplo oficial de política de IAM que usa a condição s3:prefix com variável de identidade para restringir cada usuário ao seu próprio prefixo dentro de um bucket compartilhado.
 
-[https://repost.aws/knowledge-center/s3-folder-user-access](https://repost.aws/knowledge-center/s3-folder-user-access)
+https://repost.aws/knowledge-center/s3-folder-user-access
 
 ### 4. Amazon S3 — Gerenciamento do ciclo de vida de objetos
 
 Como as regras de S3 Lifecycle transicionam objetos para classes de menor custo, com exemplos de uso para dados de retenção regulatória e histórica.
 
-[https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html)
+https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html
 
 ### 5. Amazon API Gateway — Features
 
 Papel do API Gateway como camada de publicação, segurança, monitoramento e limitação de tráfego (throttling) de APIs, incluindo integração direta com AWS Lambda.
 
-[https://aws.amazon.com/api-gateway/features/](https://aws.amazon.com/api-gateway/features/)
+https://aws.amazon.com/api-gateway/features/
 
 ### 6. AWS Lambda (página de produto)
 
 Modelo de execução orientado a evento, exemplo oficial de acionamento por upload no S3, e cobrança por uso sem custo de infraestrutura ociosa.
 
-[https://aws.amazon.com/lambda/lambda-functions/](https://aws.amazon.com/lambda/lambda-functions/)
+https://aws.amazon.com/lambda/lambda-functions/
 
 ### 7. G1 Tecnologia — reportagem jornalística
 
 Caso da Polícia de Xangai (2022): alegação de exposição de registros associados a cerca de 1 bilhão de cidadãos por falha de configuração em nuvem — usado no Ato 1 como gancho de dor, não como fonte técnica AWS.
 
-[https://g1.globo.com/tecnologia/noticia/2022/07/04/hacker-alega-ter-roubado-da-policia-registros-de-1-bilhao-de-chineses.ghtml](https://g1.globo.com/tecnologia/noticia/2022/07/04/hacker-alega-ter-roubado-da-policia-registros-de-1-bilhao-de-chineses.ghtml)
+https://g1.globo.com/tecnologia/noticia/2022/07/04/hacker-alega-ter-roubado-da-policia-registros-de-1-bilhao-de-chineses.ghtml
 
 ### 8. IBM — Relatório do Custo das Violações de Dados
 
