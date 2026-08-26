@@ -27,6 +27,7 @@
   - [Serviços AWS utilizados](#serviços-aws-utilizados)
   - [Jornada do Cliente](#jornada-do-cliente)
   - [Arquitetura AWS](#arquitetura-aws)
+  - [Resiliência e tolerância a falhas](#resiliência-e-tolerância-a-falhas)
   - [Arquitetura, AWS CAF e AWS Well-Architected Framework](#arquitetura-aws-caf-e-aws-well-architected-framework)
   - [Custos do projeto](#custos-do-projeto)
   - [Evolução e Visão de Futuro — Fase 02](#evolução-e-visão-de-futuro--fase-02)
@@ -56,9 +57,13 @@ Dessa forma, decisões relacionadas à organização, acesso, retenção e custo
 
 O tema se torna especialmente relevante quando consideramos o crescimento da utilização de Inteligência Artificial e a importância dos dados que alimentam essas soluções.
 
-No cenário proposto, os documentos enviados pelos clientes não são apenas arquivos que precisam ser armazenados. Eles representam a base histórica utilizada para a evolução futura dos modelos de IA da empresa. Assim, garantir que esses dados estejam organizados, protegidos, disponíveis quando necessários e economicamente sustentáveis ao longo do tempo é parte fundamental da estratégia do negócio.
+No cenário proposto, os documentos enviados pelos clientes não são apenas arquivos que precisam ser armazenados. Eles representam a base histórica utilizada para a evolução futura dos modelos de IA da empresa.
 
-Além disso, o cenário proposto está inserido em um contexto de crescimento significativo do mercado de Inteligência Artificial. Como identificado durante a análise do cenário:
+Assim, garantir que esses dados estejam organizados, protegidos, disponíveis quando necessários e economicamente sustentáveis ao longo do tempo é parte fundamental da estratégia do negócio.
+
+Além disso, o cenário proposto está inserido em um contexto de crescimento significativo do mercado de Inteligência Artificial.
+
+Como identificado durante a análise do cenário:
 
 > Segundo projeção da consultoria Gartner, o investimento global em inteligência artificial deve alcançar US$ 2,59 trilhões em 2026, alta de 47% em relação ao ano anterior, com expectativa de chegar a quase US$ 3,5 trilhões em 2027.
 >
@@ -66,49 +71,59 @@ Além disso, o cenário proposto está inserido em um contexto de crescimento si
 >
 > A adoção estratégica também disparou: 95,2% das organizações consideram a IA uma prioridade estratégica para 2026, contra apenas 32,8% que investiam na tecnologia em 2024.
 >
-> Cerca de 45% de todo o investimento previsto para 2026 vai para infraestrutura de IA — aproximadamente US$ 1,4 trilhão — incluindo justamente os componentes que estou utilizando: armazenamento em nuvem, processamento serverless e pipelines de dados.
+> Cerca de 45% de todo o investimento previsto para 2026 está relacionado à infraestrutura de IA, incluindo componentes como armazenamento em nuvem, processamento e pipelines de dados.
 
 Esses dados ajudam a contextualizar por que uma arquitetura voltada ao armazenamento e gerenciamento de dados para aplicações de IA é relevante. O crescimento dos investimentos em Inteligência Artificial também aumenta a importância da infraestrutura necessária para sustentar essas soluções.
 
-No caso da Startup XYZ, essa relação é particularmente importante porque os documentos recebidos pela plataforma representam justamente a matéria-prima histórica que poderá ser utilizada para o treinamento e evolução dos futuros modelos de IA.
+No caso da Startup Jarva's, essa relação é particularmente importante porque os documentos recebidos pela plataforma representam justamente a matéria-prima histórica que poderá ser utilizada para o treinamento e evolução dos futuros modelos de IA.
 
-> Toda essa onda de investimento em IA depende de algo que raramente aparece nas manchetes: dados bem armazenados, organizados e disponíveis para treinar modelos. Não existe IA de qualidade sem uma base de dados histórica bem estruturada por trás. O case da Startup XYZ é, na prática, uma versão em escala reduzida desse problema que empresas de todos os portes estão enfrentando agora — e é isso que pretendo deixar claro logo na abertura da apresentação.
+> **Toda essa evolução da IA depende de algo fundamental: dados bem armazenados, organizados, protegidos e disponíveis para utilização. Não existe IA de qualidade sem uma base de dados histórica adequada por trás.**
 
-Portanto, o projeto não foi escolhido apenas por envolver serviços populares de computação em nuvem ou Inteligência Artificial. Ele representa um problema cada vez mais relevante: **como construir uma infraestrutura capaz de transformar o crescimento da quantidade de dados em um ativo estratégico, sem comprometer segurança, disponibilidade e sustentabilidade financeira.**
+Portanto, o projeto não foi escolhido apenas por envolver serviços populares de computação em nuvem ou Inteligência Artificial. Ele representa um problema cada vez mais relevante:
+
+> **Como construir uma infraestrutura capaz de transformar o crescimento da quantidade de dados em um ativo estratégico, sem comprometer segurança, disponibilidade e sustentabilidade financeira?**
 
 ---
 
 # 2. Contextualização do Projeto
 
-A **Startup XYZ** é uma empresa em fase de hipercrescimento que oferece uma plataforma SaaS voltada para **extração inteligente de dados utilizando Inteligência Artificial**.
+A **Startup Jarva's** é uma empresa em fase de hipercrescimento que oferece uma plataforma SaaS voltada para **extração inteligente de dados utilizando Inteligência Artificial**.
 
 Como parte desse serviço, a plataforma recebe documentos enviados pelos clientes, principalmente **PDFs e imagens**, que servem como insumo para o processamento da IA.
 
 O volume previsto é de aproximadamente **50 mil novos arquivos por mês**, equivalente a cerca de **600 mil arquivos por ano**, com tendência de crescimento contínuo.
 
-À primeira vista, o problema poderia parecer simplesmente uma questão de armazenamento. Entretanto, o cenário possui uma característica que muda completamente a forma como o problema deve ser tratado: **os arquivos não podem ser deletados**.
+À primeira vista, o problema poderia parecer simplesmente uma questão de armazenamento. Entretanto, o cenário possui uma característica que muda completamente a forma como o problema deve ser tratado:
 
-Os documentos antigos continuam tendo valor porque representam o histórico utilizado como base para o treinamento de futuros modelos de Inteligência Artificial. Portanto, à medida que a empresa cresce, sua quantidade de dados também cresce continuamente.
+> **Os arquivos não podem ser deletados.**
+
+Os documentos antigos continuam tendo valor porque representam o histórico utilizado como base para o treinamento de futuros modelos de Inteligência Artificial.
+
+Portanto, à medida que a empresa cresce, sua quantidade de dados também cresce continuamente.
 
 Em poucos anos, a plataforma poderá acumular milhões de documentos. Esse histórico representa não apenas uma grande quantidade de dados, mas um ativo intelectual que pode contribuir diretamente para a evolução da empresa e de seus modelos de IA.
 
-É justamente por isso que entendemos que a Startup XYZ não está simplesmente construindo um repositório de documentos.
+É justamente por isso que entendemos que a Startup Jarva's não está simplesmente construindo um repositório de documentos.
 
 > **Um repositório preserva informações. Um ativo de dados preserva informações com a intenção de gerar valor a partir delas.**
 
-Essa mudança de perspectiva é fundamental para compreender o restante do projeto. O armazenamento deixa de ser apenas uma infraestrutura de apoio e passa a fazer parte da própria estratégia do produto.
+Essa mudança de perspectiva é fundamental para compreender o restante do projeto.
+
+O armazenamento deixa de ser apenas uma infraestrutura de apoio e passa a fazer parte da própria estratégia do produto.
 
 ---
 
 # 3. Problema a ser resolvido e impacto no negócio
 
-O problema da Startup XYZ é resultado da combinação de **crescimento acelerado, necessidade de isolamento entre clientes, retenção permanente dos documentos e controle dos custos de armazenamento**.
+O problema da Startup Jarva's é resultado da combinação de **crescimento acelerado, necessidade de isolamento entre clientes, retenção permanente dos documentos e controle dos custos de armazenamento**.
 
 ## Segurança e isolamento dos dados
 
 A plataforma possui natureza **multi-tenant**, ou seja, diferentes clientes utilizam a mesma aplicação e sua infraestrutura.
 
-Isso cria uma necessidade fundamental: **um cliente não pode ter acesso aos documentos pertencentes a outro cliente**.
+Isso cria uma necessidade fundamental:
+
+> **Um cliente não pode ter acesso aos documentos pertencentes a outro cliente.**
 
 Os usuários precisam conseguir acessar seus próprios documentos de maneira rápida e segura, mas sem que uma falha de configuração, permissão ou implementação permita que arquivos de outros usuários sejam expostos.
 
@@ -116,31 +131,39 @@ Essa necessidade de isolamento precisa ser considerada desde o início da arquit
 
 O risco associado a esse problema não é apenas teórico. O próprio documento de fundamentação do projeto utiliza um caso real como forma de contextualizar o impacto que uma configuração inadequada pode causar:
 
-> Em 2022, um hacker alegou ter obtido dados de cerca de um bilhão de cidadãos chineses a partir de uma implantação
-> do Elasticsearch associada a uma agência governamental. A própria reportagem do G1 levantou dúvidas sobre a
-> veracidade e a dimensão da alegação, portanto o caso não deve ser tratado como uma exposição comprovada nessa
-> escala.
-> Fonte: G1 Tecnologia, "Hacker alega ter roubado da polícia registros de 1 bilhão de chineses" (jul. 2022) — g1.globo.com/tecnologia
+> Em 2022, um hacker alegou ter obtido dados de cerca de um bilhão de cidadãos chineses a partir de uma implantação do Elasticsearch associada a uma agência governamental. A própria reportagem levantou dúvidas sobre a veracidade e a dimensão da alegação, portanto o caso não deve ser tratado como uma exposição comprovada nessa escala.
+>
+> O exemplo é utilizado como contextualização do risco associado a configurações inadequadas de infraestrutura e exposição indevida de dados.
 
-O ponto principal, entretanto, não é afirmar que esse caso representa uma exposição comprovada naquela escala. O valor do exemplo está em demonstrar o tipo de risco que a Startup XYZ precisa evitar: **uma configuração ou implantação inadequada pode transformar uma infraestrutura que deveria proteger dados em uma porta de acesso a eles.**
+O ponto principal, entretanto, não é afirmar que esse caso representa uma exposição comprovada naquela escala.
 
-Isso é especialmente relevante para a Startup XYZ porque a plataforma dependerá da confiança de clientes que estarão entregando seus próprios documentos ao serviço.
+O valor do exemplo está em demonstrar o tipo de risco que a Startup Jarva's precisa evitar:
+
+> **Uma configuração ou implantação inadequada pode transformar uma infraestrutura que deveria proteger dados em uma porta de acesso a eles.**
+
+Isso é especialmente relevante para a Startup Jarva's porque a plataforma dependerá da confiança de clientes que estarão entregando seus próprios documentos ao serviço.
 
 Uma exposição de dados, portanto, não seria apenas um incidente técnico. Ela poderia comprometer a confiança dos clientes na plataforma e, consequentemente, a própria proposta de valor da empresa.
 
-Por esse motivo, **segurança não deve ser uma camada adicionada posteriormente**. Ela precisa fazer parte da arquitetura desde o primeiro arquivo recebido pela plataforma.
+Por esse motivo:
+
+> **Segurança não deve ser uma camada adicionada posteriormente. Ela precisa fazer parte da arquitetura desde o primeiro arquivo recebido pela plataforma.**
 
 ---
 
 ## Retenção dos documentos
 
-Ao contrário de sistemas em que dados antigos podem ser descartados, a Startup XYZ possui uma exigência estratégica diferente:
+Ao contrário de sistemas em que dados antigos podem ser descartados, a Startup Jarva's possui uma exigência estratégica diferente:
 
-**nenhum arquivo deve ser deletado.**
+> **Nenhum arquivo deve ser excluído como parte da operação normal da plataforma.**
 
-Os documentos representam a base histórica que poderá ser utilizada para o treinamento dos próximos modelos de IA. Dessa forma, o fato de um documento ser antigo não significa que ele perdeu seu valor. Pelo contrário, ele passa a fazer parte do patrimônio histórico de dados da empresa.
+Os documentos representam a base histórica que poderá ser utilizada para o treinamento dos próximos modelos de IA.
 
-Em números, o cenário prevê aproximadamente **50 mil arquivos por mês**, o equivalente a cerca de **600 mil arquivos por ano**. Como nenhum arquivo é descartado, esse volume continuará crescendo ao longo do tempo, podendo chegar a milhões de documentos após alguns anos de operação.
+Dessa forma, o fato de um documento ser antigo não significa que ele perdeu seu valor. Pelo contrário, ele passa a fazer parte do patrimônio histórico de dados da empresa.
+
+Em números, o cenário prevê aproximadamente **50 mil arquivos por mês**, o equivalente a cerca de **600 mil arquivos por ano**.
+
+Como nenhum arquivo é descartado como parte da operação normal, esse volume continuará crescendo ao longo do tempo, podendo chegar a milhões de documentos após alguns anos de operação.
 
 ---
 
@@ -150,11 +173,17 @@ A retenção permanente cria um segundo problema.
 
 Se aproximadamente 50 mil arquivos são adicionados todos os meses e nenhum deles é removido, o volume armazenado continuará crescendo indefinidamente.
 
-Manter todos esses documentos permanentemente em uma camada de armazenamento voltada para acesso frequente poderia gerar um custo incompatível com o crescimento da empresa.
+Manter todos esses documentos permanentemente em uma classe de armazenamento voltada para acesso frequente poderia gerar um custo incompatível com o crescimento da empresa.
 
-Por isso, o projeto precisa considerar o **ciclo de vida dos dados**. Documentos recentes possuem maior frequência de acesso e precisam de disponibilidade imediata, enquanto documentos históricos tendem a ser acessados com menor frequência, embora continuem tendo valor estratégico.
+Por isso, o projeto precisa considerar o **ciclo de vida dos dados**.
 
-Essa diferença permite pensar no armazenamento não como um único espaço estático, mas como uma estrutura em que **o custo acompanha o comportamento do dado ao longo do tempo**.
+Documentos recentes possuem maior frequência de acesso e precisam de disponibilidade imediata, enquanto documentos históricos tendem a ser acessados com menor frequência, embora continuem tendo valor estratégico.
+
+Na arquitetura proposta, os documentos permanecem inicialmente no **Amazon S3 Standard**, adequado ao período de maior frequência de acesso.
+
+Após os primeiros **12 meses**, uma regra de **S3 Lifecycle** pode realizar a transição automática dos objetos para o **S3 Glacier Deep Archive**, reduzindo o custo de armazenamento dos documentos históricos que continuam precisando ser preservados.
+
+Essa estratégia permite que o custo de armazenamento acompanhe o comportamento esperado dos dados ao longo do tempo.
 
 ---
 
@@ -163,13 +192,15 @@ Essa diferença permite pensar no armazenamento não como um único espaço est�
 A partir desses problemas, identificamos quatro necessidades que precisam ser atendidas simultaneamente:
 
 1. **Acesso rápido:** os clientes precisam acessar normalmente os documentos durante os primeiros 12 meses.
-2. **Retenção permanente:** nenhum arquivo pode ser deletado, pois todos fazem parte do ativo histórico da empresa.
-3. **Custo sob controle:** documentos antigos precisam deixar de ocupar uma camada de armazenamento mais cara quando o acesso se tornar menos frequente.
+2. **Retenção permanente:** nenhum arquivo deve ser excluído como parte da operação normal da plataforma, pois todos fazem parte do ativo histórico da empresa.
+3. **Custo sob controle:** documentos antigos devem deixar de ocupar uma classe de armazenamento de acesso frequente quando o acesso se tornar menos frequente.
 4. **Isolamento e segurança:** cada documento pertence a um cliente específico e não pode ser acessado por outros clientes.
 
 É justamente a combinação dessas necessidades que torna o problema mais interessante.
 
-A Startup XYZ não pode simplesmente escolher a alternativa mais barata, porque isso poderia prejudicar o acesso aos documentos. Da mesma forma, não pode manter todos os dados permanentemente na camada de maior disponibilidade, porque o custo cresceria junto com a base histórica.
+A Startup Jarva's não pode simplesmente escolher a alternativa mais barata, porque isso poderia prejudicar o acesso aos documentos.
+
+Da mesma forma, não pode manter todo o histórico permanentemente em uma classe de armazenamento voltada para acesso frequente, porque o custo cresceria junto com a base histórica.
 
 E também não pode priorizar apenas a facilidade de acesso sem considerar o isolamento entre clientes.
 
@@ -197,7 +228,7 @@ A solução deve suportar o crescimento contínuo da plataforma e a ingestão de
 
 ### 🛡️ Durabilidade e retenção
 
-Os documentos históricos não devem ser excluídos pela aplicação.
+Os documentos históricos não devem ser excluídos pela aplicação como parte da operação normal.
 
 A solução deve permitir que os arquivos permaneçam preservados mesmo quando deixarem de ser acessados com frequência.
 
@@ -209,7 +240,7 @@ Os documentos enviados pelos clientes devem permanecer disponíveis para consult
 
 O custo de armazenamento deve ser reduzido conforme os documentos envelhecem.
 
-A solução deve permitir que os arquivos continuem preservados sem exigir que todo o histórico permaneça permanentemente em uma camada de armazenamento de acesso frequente.
+A solução deve permitir que os arquivos continuem preservados sem exigir que todo o histórico permaneça permanentemente em uma classe de armazenamento voltada para acesso frequente.
 
 ### 📊 Operação e acompanhamento
 
@@ -219,39 +250,97 @@ A infraestrutura deve permitir acompanhar o funcionamento da solução, identifi
 
 A infraestrutura deve poder ser recriada de forma consistente, permitindo que a arquitetura seja documentada e reproduzida por meio de código.
 
+### 🛡️ Resiliência e tolerância a falhas
+
+A solução deve evitar dependências em servidores ou componentes individuais cuja indisponibilidade possa interromper completamente o funcionamento da plataforma.
+
+Sempre que possível, a arquitetura deve utilizar serviços gerenciados capazes de oferecer alta disponibilidade como parte de sua operação, reduzindo a necessidade de gerenciamento manual de infraestrutura.
+
+Além disso, a solução deve ser capaz de continuar preservando os documentos e mantendo os principais serviços disponíveis mesmo diante de falhas pontuais de componentes ou da infraestrutura subjacente.
+
 ---
 
 # 5. Solução
 
 ## Da necessidade à solução
 
-A partir desses requisitos, fica claro que o desafio da Startup XYZ não está apenas em armazenar uma grande quantidade de documentos. A arquitetura precisa acompanhar o crescimento da empresa, proteger os dados de cada cliente, preservar o histórico como um ativo estratégico e, ao mesmo tempo, manter os custos sob controle.
+A partir desses requisitos, fica claro que o desafio da Startup Jarva's não está apenas em armazenar uma grande quantidade de documentos.
 
-É a partir dessas necessidades que chegamos à proposta de arquitetura deste projeto. A escolha dos serviços AWS não parte, portanto, da tecnologia em si, mas dos problemas que precisam ser resolvidos e dos requisitos que a solução precisa atender.
+A arquitetura precisa acompanhar o crescimento da empresa, proteger os dados de cada cliente, preservar o histórico como um ativo estratégico e, ao mesmo tempo, manter os custos sob controle.
+
+É a partir dessas necessidades que chegamos à proposta de arquitetura deste projeto.
+
+A escolha dos serviços AWS não parte, portanto, da tecnologia em si, mas dos problemas que precisam ser resolvidos e dos requisitos que a solução precisa atender.
 
 A proposta desenvolvida utiliza uma arquitetura **serverless**, baseada em serviços gerenciados da AWS, reduzindo a necessidade de gerenciamento de infraestrutura e permitindo que a solução acompanhe a demanda da plataforma.
 
-A arquitetura também separa responsabilidades importantes do sistema: autenticação, controle de acesso, lógica de negócio, armazenamento dos documentos, gerenciamento de metadados, observabilidade, auditoria e provisionamento da infraestrutura.
+A arquitetura também separa responsabilidades importantes do sistema:
+
+- Autenticação;
+- Controle de acesso;
+- Lógica de negócio;
+- Armazenamento dos documentos;
+- Gerenciamento de metadados;
+- Observabilidade;
+- Auditoria;
+- Gerenciamento do ciclo de vida dos dados;
+- Provisionamento da infraestrutura.
+
+---
 
 ## Visão geral da solução
 
 A solução foi projetada para que o cliente possa enviar e acessar documentos sem receber acesso direto e irrestrito ao ambiente de armazenamento.
 
-O fluxo começa com a autenticação do usuário por meio do **Amazon Cognito**. Após a autenticação, a aplicação utiliza o token de identidade para realizar solicitações à API, publicada pelo **Amazon API Gateway**.
+O fluxo começa com a autenticação do usuário por meio do **Amazon Cognito**.
+
+Após a autenticação, o usuário recebe os tokens necessários para acessar a aplicação e realizar solicitações à API.
+
+As requisições são direcionadas ao **Amazon API Gateway**, que atua como ponto de entrada da API e integra-se à lógica da aplicação.
 
 As solicitações são encaminhadas para funções do **AWS Lambda**, responsáveis por aplicar as regras de negócio e validar se o usuário possui autorização para realizar determinada operação.
 
-Os metadados dos documentos e as informações de propriedade são armazenados no **Amazon DynamoDB**. Dessa forma, antes de permitir operações como consulta, download ou geração de uma URL de acesso, a aplicação pode verificar a relação entre o usuário autenticado e o documento solicitado.
+Os metadados dos documentos e as informações de propriedade são armazenados no **Amazon DynamoDB**.
 
-Os arquivos são armazenados em um bucket privado do **Amazon S3**, organizado de acordo com a estrutura definida pela aplicação. O acesso aos objetos ocorre por meio de URLs pré-assinadas e temporárias, geradas somente após a validação das permissões necessárias.
+Dessa forma, antes de permitir operações como consulta, download ou geração de uma URL de acesso, a aplicação pode verificar a relação entre o usuário autenticado e o documento solicitado.
 
-Essa abordagem contribui para o isolamento entre clientes e evita a exposição pública do bucket. O usuário recebe autorização apenas para realizar a operação específica solicitada e dentro de um período limitado.
+Os arquivos são armazenados em um bucket privado do **Amazon S3**, organizado de acordo com a estrutura definida pela aplicação.
 
-Para acompanhar o crescimento da base histórica, a solução também utiliza recursos de gerenciamento do ciclo de vida dos dados. Os documentos podem permanecer inicialmente em uma camada adequada ao seu padrão de acesso e, após o período definido pela estratégia de retenção, são movimentados automaticamente para uma camada de armazenamento histórico de menor custo.
+O acesso aos objetos ocorre por meio de **URLs pré-assinadas e temporárias**, geradas somente após a validação das permissões necessárias.
 
-Ao mesmo tempo, o **S3 Object Lock** contribui para a preservação dos documentos durante o período de retenção configurado, reforçando o requisito de que o histórico não seja removido ou alterado indevidamente.
+Essa abordagem contribui para o isolamento entre clientes e evita a exposição pública do bucket.
 
-O resultado é uma arquitetura que busca equilibrar **segurança, escalabilidade, preservação histórica, experiência do usuário e sustentabilidade dos custos**.
+O usuário recebe autorização apenas para realizar a operação específica solicitada e dentro de um período limitado.
+
+### Estratégia de armazenamento
+
+Durante os primeiros **12 meses**, os documentos permanecem no **Amazon S3 Standard**, atendendo ao requisito de acesso frequente e disponibilidade imediata.
+
+Após esse período, uma regra de **S3 Lifecycle** pode realizar a transição automática dos objetos para o **S3 Glacier Deep Archive**.
+
+Essa classe é adequada ao armazenamento de longo prazo de dados que precisam ser preservados, mas que apresentam baixa frequência de acesso.
+
+A transição permite reduzir o custo de armazenamento sem eliminar os documentos históricos.
+
+### Preservação dos documentos
+
+O **S3 Object Lock** contribui para proteger os objetos contra exclusão ou alteração durante o período de retenção configurado.
+
+A configuração da retenção deve ser definida de acordo com os requisitos de negócio da Startup Jarva's.
+
+Dessa forma, o Object Lock funciona como uma camada adicional de proteção dos documentos, enquanto o S3 Lifecycle é responsável pela estratégia de transição entre classes de armazenamento.
+
+### Criptografia
+
+Os objetos armazenados no Amazon S3 são protegidos por **criptografia server-side**, utilizando a criptografia padrão oferecida pelo serviço.
+
+Em uma evolução futura, o **AWS KMS** poderá ser incorporado para proporcionar maior controle sobre as chaves criptográficas e suas respectivas políticas de acesso.
+
+O resultado é uma arquitetura que busca equilibrar **segurança, escalabilidade, resiliência, preservação histórica, experiência do usuário e sustentabilidade dos custos**.
+
+Ao utilizar serviços gerenciados e serverless, a solução também reduz a dependência de componentes individuais administrados pela equipe.
+
+Dessa forma, a arquitetura pode se beneficiar dos mecanismos de disponibilidade e tolerância a falhas oferecidos pelos serviços AWS utilizados, mantendo o foco da equipe na evolução da aplicação e nas necessidades do negócio.
 
 ---
 
@@ -260,13 +349,12 @@ O resultado é uma arquitetura que busca equilibrar **segurança, escalabilidade
 | Serviço | Papel na solução |
 |---|---|
 | **Amazon Cognito** | Autenticação e gerenciamento da identidade dos usuários |
-| **Amazon API Gateway** | Camada de entrada da API, validação de solicitações e integração com a lógica da aplicação |
+| **Amazon API Gateway** | Camada de entrada da API, controle das solicitações e integração com a lógica da aplicação |
 | **AWS Lambda** | Execução da lógica de negócio, validações e geração de URLs pré-assinadas |
 | **Amazon DynamoDB** | Armazenamento dos metadados e informações de propriedade dos documentos |
-| **Amazon S3** | Armazenamento seguro e durável dos documentos |
-| **S3 Intelligent-Tiering** | Otimização automática da camada de armazenamento de acordo com o padrão de acesso |
+| **Amazon S3** | Armazenamento seguro, durável e escalável dos documentos |
 | **S3 Lifecycle** | Gerenciamento do ciclo de vida e transição dos documentos históricos |
-| **S3 Glacier Deep Archive** | Retenção histórica de longo prazo para documentos com menor frequência de acesso |
+| **S3 Glacier Deep Archive** | Armazenamento histórico de longo prazo para documentos com baixa frequência de acesso |
 | **S3 Object Lock** | Proteção dos objetos contra exclusão ou alteração durante o período de retenção configurado |
 | **S3 Transfer Acceleration** | Otimização da transferência de arquivos entre clientes geograficamente distribuídos e o Amazon S3 |
 | **AWS IAM** | Controle de permissões seguindo o princípio do menor privilégio |
@@ -278,7 +366,9 @@ O resultado é uma arquitetura que busca equilibrar **segurança, escalabilidade
 
 ## Jornada do Cliente
 
-A arquitetura técnica mostra como os serviços se conectam. Entretanto, para compreender a solução sob a perspectiva de quem utiliza a plataforma, também desenvolvemos uma visão focada na **Jornada do Cliente**.
+A arquitetura técnica mostra como os serviços se conectam.
+
+Entretanto, para compreender a solução sob a perspectiva de quem utiliza a plataforma, também desenvolvemos uma visão focada na **Jornada do Cliente**.
 
 Essa jornada representa o caminho percorrido pelo usuário desde o acesso à plataforma até a preservação histórica de seus documentos.
 
@@ -290,19 +380,31 @@ A jornada foi organizada em três momentos principais:
 
 ### 1. Acesso e envio
 
-O cliente acessa a plataforma, realiza sua autenticação e envia um documento para o processamento da aplicação. Nesse momento, o objetivo é proporcionar uma experiência simples ao usuário sem abrir mão da segurança e da identificação correta da propriedade do documento.
+O cliente acessa a plataforma, realiza sua autenticação e envia um documento para o processamento da aplicação.
+
+Nesse momento, o objetivo é proporcionar uma experiência simples ao usuário sem abrir mão da segurança e da identificação correta da propriedade do documento.
 
 ### 2. Proteção e utilização
 
-Após o envio, o documento é associado à conta do cliente e armazenado de forma segura. Quando o usuário deseja consultar ou baixar um arquivo, a plataforma verifica sua identidade e suas permissões antes de liberar o acesso.
+Após o envio, o documento é associado à conta do cliente e armazenado de forma segura.
 
-Dessa forma, o cliente não recebe acesso irrestrito ao ambiente de armazenamento. O acesso é concedido somente ao documento solicitado e de forma controlada.
+Quando o usuário deseja consultar ou baixar um arquivo, a plataforma verifica sua identidade e suas permissões antes de liberar o acesso.
+
+Dessa forma, o cliente não recebe acesso irrestrito ao ambiente de armazenamento.
+
+O acesso é concedido somente ao documento solicitado e de forma controlada.
 
 ### 3. Preservação histórica
 
-Com o passar do tempo, os documentos continuam preservados como parte do histórico da empresa. Conforme seu padrão de acesso muda, a estratégia de armazenamento permite otimizar os custos sem perder o histórico que poderá gerar valor para o negócio no futuro.
+Com o passar do tempo, os documentos continuam preservados como parte do histórico da empresa.
 
-Essa visão reforça um dos princípios centrais do projeto: **a segurança e a preservação dos dados devem estar presentes durante toda a jornada do cliente, e não apenas no momento do armazenamento**.
+Durante os primeiros 12 meses, os arquivos permanecem em uma classe adequada ao acesso frequente.
+
+Após esse período, a estratégia de ciclo de vida permite realizar a transição para uma classe de armazenamento histórico de menor custo, mantendo os documentos preservados para futuras necessidades do negócio.
+
+Essa visão reforça um dos princípios centrais do projeto:
+
+> **A segurança e a preservação dos dados devem estar presentes durante toda a jornada do cliente, e não apenas no momento do armazenamento.**
 
 ---
 
@@ -311,23 +413,72 @@ Essa visão reforça um dos princípios centrais do projeto: **a segurança e a 
 A visão técnica da solução apresenta os serviços AWS utilizados e o fluxo principal de comunicação entre os componentes da arquitetura.
 
 <p align="center">
-  <img width="1536" height="1024" alt="Image" src="https://github.com/user-attachments/assets/e90aaf15-e642-45ec-99ba-cd88689b85d8" />
+  <img width="1536" height="1024" alt="Arquitetura AWS - Plataforma SaaS de Gestão de Documentos com IA" src="https://github.com/user-attachments/assets/e90aaf15-e642-45ec-99ba-cd88689b85d8" />
 </p>
 
 O fluxo principal pode ser resumido da seguinte forma:
 
 1. O usuário realiza o login na plataforma utilizando o **Amazon Cognito**.
-2. Após a autenticação, o usuário recebe um token de identidade.
+2. Após a autenticação, o usuário recebe os tokens necessários para acessar a aplicação.
 3. As solicitações são enviadas para o **Amazon API Gateway**, que atua como ponto de entrada da API.
 4. O **AWS Lambda** processa a solicitação e aplica as regras de negócio.
 5. Quando necessário, a função consulta os metadados no **Amazon DynamoDB** para validar a propriedade e a autorização relacionadas ao documento.
 6. Após a validação, a aplicação gera uma URL pré-assinada para a operação solicitada no **Amazon S3**.
 7. O usuário realiza o upload ou download diretamente no S3 utilizando essa autorização temporária.
-8. Os documentos permanecem armazenados em um bucket privado e seguem a estratégia definida para seu ciclo de vida e retenção.
+8. Os documentos permanecem armazenados em um bucket privado.
+9. Durante os primeiros 12 meses, os documentos permanecem no **S3 Standard**.
+10. Após esse período, uma regra de **S3 Lifecycle** pode realizar a transição dos documentos para o **S3 Glacier Deep Archive**.
+11. O **S3 Object Lock** protege os objetos de acordo com o período de retenção configurado.
 
 Além do fluxo principal, a arquitetura incorpora mecanismos de observabilidade, auditoria, controle de acesso, otimização de custos e infraestrutura como código.
 
-É importante destacar que serviços como **S3 Lifecycle**, **S3 Intelligent-Tiering**, **S3 Glacier Deep Archive** e **S3 Object Lock** não representam etapas pelas quais uma requisição do usuário necessariamente passa em tempo real. Eles fazem parte da estratégia de gerenciamento e preservação dos dados ao longo de seu ciclo de vida.
+É importante destacar que serviços como **S3 Lifecycle**, **S3 Glacier Deep Archive** e **S3 Object Lock** não representam etapas pelas quais uma requisição do usuário necessariamente passa em tempo real.
+
+Eles fazem parte da estratégia de gerenciamento e preservação dos dados ao longo de seu ciclo de vida.
+
+O **S3 Transfer Acceleration**, por sua vez, atua na transferência dos arquivos entre clientes geograficamente distribuídos e o Amazon S3, quando esse recurso estiver habilitado para o cenário.
+
+---
+
+## Resiliência e tolerância a falhas
+
+Além de segurança e escalabilidade, a arquitetura também foi pensada para reduzir a dependência de componentes individuais que poderiam representar pontos únicos de falha.
+
+Uma das principais decisões da Fase 01 foi utilizar uma arquitetura baseada em serviços **serverless e gerenciados pela AWS**.
+
+Isso significa que a equipe não precisa depender de um único servidor, máquina virtual ou instância para manter o funcionamento da aplicação.
+
+Os principais componentes da solução, como **Amazon Cognito**, **Amazon API Gateway**, **AWS Lambda**, **Amazon DynamoDB** e **Amazon S3**, são serviços gerenciados que operam sobre uma infraestrutura fornecida pela AWS.
+
+Dessa forma, a aplicação não depende de uma única Zona de Disponibilidade configurada manualmente pela equipe para executar seu fluxo principal.
+
+A responsabilidade pela infraestrutura subjacente e pela disponibilidade dos serviços é compartilhada com a AWS de acordo com as características e os acordos de nível de serviço de cada serviço.
+
+### O que acontece se um componente falhar?
+
+A arquitetura foi projetada para reduzir o impacto de falhas relacionadas à infraestrutura de componentes individuais.
+
+Por exemplo, não existe uma única instância EC2 responsável por processar todas as solicitações da plataforma.
+
+A lógica da aplicação é executada pelo **AWS Lambda**, enquanto os documentos e metadados são armazenados em serviços gerenciados como **Amazon S3** e **Amazon DynamoDB**.
+
+Essa abordagem reduz o risco de que a falha de um único servidor administrado pela aplicação interrompa completamente o sistema.
+
+Entretanto, é importante destacar que:
+
+> **Resiliência não significa que a aplicação é imune a qualquer tipo de falha.**
+
+Falhas relacionadas à lógica da aplicação, configurações incorretas, permissões inadequadas ou indisponibilidades de serviços externos ainda precisam ser consideradas durante a evolução do sistema.
+
+Por esse motivo, a arquitetura incorpora mecanismos de **observabilidade**, utilizando o **Amazon CloudWatch**, e de **auditoria**, utilizando o **AWS CloudTrail**, permitindo identificar problemas e acompanhar o comportamento operacional da solução.
+
+### Resiliência como parte da evolução da arquitetura
+
+A Fase 01 estabelece uma base resiliente por meio da utilização de serviços gerenciados e da redução de pontos únicos de falha sob responsabilidade direta da equipe.
+
+Conforme a plataforma cresça e seus requisitos de disponibilidade se tornem mais exigentes, novos mecanismos poderão ser avaliados, como estratégias avançadas de recuperação, replicação de dados e planos de continuidade de negócio.
+
+Dessa forma, a resiliência é tratada como um princípio presente desde a concepção da solução, mas também como uma área que pode evoluir de acordo com a criticidade e a escala do negócio.
 
 ---
 
@@ -335,7 +486,9 @@ Além do fluxo principal, a arquitetura incorpora mecanismos de observabilidade,
 
 A construção da solução também foi orientada por boas práticas de arquitetura em nuvem, considerando princípios presentes no **AWS Cloud Adoption Framework (AWS CAF)** e no **AWS Well-Architected Framework**.
 
-O AWS CAF contribui para analisar a adoção da nuvem de forma mais ampla, considerando aspectos que vão além da tecnologia. No contexto deste projeto, ele ajuda a relacionar a arquitetura às necessidades do negócio, à segurança, à operação e à gestão dos recursos utilizados.
+O AWS CAF contribui para analisar a adoção da nuvem de forma mais ampla, considerando aspectos que vão além da tecnologia.
+
+No contexto deste projeto, ele ajuda a relacionar a arquitetura às necessidades do negócio, à segurança, à operação e à gestão dos recursos utilizados.
 
 Já o AWS Well-Architected Framework oferece princípios técnicos para avaliar se uma arquitetura está sendo construída de maneira segura, confiável, eficiente e sustentável.
 
@@ -347,6 +500,10 @@ O projeto prioriza a autenticação dos usuários, o controle de permissões e a
 
 O **Amazon Cognito**, o **AWS IAM**, o **Amazon API Gateway**, o **AWS Lambda** e o uso de URLs pré-assinadas contribuem para que o acesso aos dados seja controlado e limitado às operações autorizadas.
 
+Os objetos armazenados no Amazon S3 também são protegidos por criptografia server-side.
+
+Na Fase 02, o **AWS KMS** poderá ser incorporado para ampliar o controle sobre as chaves criptográficas.
+
 ### 📈 Escalabilidade e performance
 
 A utilização de serviços serverless permite que a solução acompanhe a demanda sem depender de uma única máquina responsável pelo processamento das solicitações.
@@ -355,17 +512,35 @@ O **Amazon API Gateway**, o **AWS Lambda**, o **Amazon DynamoDB** e o **Amazon S
 
 O **S3 Transfer Acceleration** complementa essa estratégia ao otimizar a transferência de arquivos em cenários nos quais os clientes estão geograficamente distribuídos.
 
-### 🛡️ Confiabilidade e preservação
+### 🛡️ Confiabilidade e resiliência
+
+A arquitetura foi projetada para reduzir a dependência de componentes individuais administrados pela equipe.
+
+A utilização de serviços gerenciados como **Amazon Cognito**, **Amazon API Gateway**, **AWS Lambda**, **Amazon DynamoDB** e **Amazon S3** permite que a aplicação se apoie em uma infraestrutura fornecida e operada pela AWS, sem depender de um único servidor responsável pelo funcionamento da plataforma.
+
+Essa escolha contribui para a resiliência da solução, reduzindo pontos únicos de falha associados à infraestrutura tradicional e permitindo que a aplicação acompanhe o crescimento do negócio sem exigir o gerenciamento direto de servidores.
+
+Além disso, o **Amazon CloudWatch** permite acompanhar o comportamento operacional da aplicação e identificar possíveis falhas, enquanto a infraestrutura como código facilita a reprodução consistente do ambiente quando necessário.
+
+### 🗂️ Durabilidade e preservação histórica
 
 O **Amazon S3** oferece uma base durável para o armazenamento dos documentos, enquanto a estratégia de ciclo de vida permite preservar o histórico ao longo do tempo.
 
-O **S3 Object Lock** reforça a proteção dos objetos contra exclusão ou alteração durante o período de retenção configurado, contribuindo para o requisito de preservação histórica.
+Durante os primeiros 12 meses, os documentos permanecem no **S3 Standard**.
+
+Após esse período, o **S3 Lifecycle** pode realizar a transição para o **S3 Glacier Deep Archive**, permitindo reduzir os custos de armazenamento dos documentos históricos sem eliminá-los.
+
+O **S3 Object Lock** reforça a proteção dos objetos contra exclusão ou alteração durante o período de retenção configurado.
+
+Essa combinação permite tratar os documentos não apenas como arquivos armazenados, mas como um ativo histórico que continua disponível para gerar valor para o negócio ao longo do tempo.
 
 ### 💰 Otimização de custos
 
 A arquitetura reconhece que documentos recentes e históricos possuem padrões de acesso diferentes.
 
-Por esse motivo, recursos como **S3 Intelligent-Tiering**, **S3 Lifecycle** e **S3 Glacier Deep Archive** fazem parte da estratégia para adequar o armazenamento ao comportamento dos dados e evitar que todo o histórico permaneça em uma camada voltada ao acesso frequente.
+Por esse motivo, a estratégia de **S3 Lifecycle** e **S3 Glacier Deep Archive** permite adequar a classe de armazenamento ao comportamento esperado dos dados.
+
+Os documentos permanecem inicialmente em uma classe adequada ao acesso frequente e, após 12 meses, podem ser transferidos para uma classe voltada ao armazenamento histórico de longo prazo.
 
 Além disso, serviços serverless reduzem a necessidade de manter servidores provisionados e ociosos exclusivamente para suportar a aplicação.
 
@@ -389,9 +564,15 @@ Por fim, o **AWS CloudFormation** permite que a infraestrutura seja provisionada
 
 ## Evolução e Visão de Futuro — Fase 02
 
-A arquitetura apresentada na Fase 01 foi desenvolvida para atender aos principais requisitos do cenário proposto, priorizando segurança, isolamento entre clientes, escalabilidade, retenção dos documentos, otimização de custos, observabilidade e reprodutibilidade da infraestrutura.
+A arquitetura apresentada na Fase 01 foi desenvolvida para atender aos principais requisitos do cenário proposto, priorizando segurança, isolamento entre clientes, escalabilidade, resiliência, retenção dos documentos, otimização de custos, observabilidade e reprodutibilidade da infraestrutura.
 
-Como parte da evolução da solução, identificamos alguns pontos que podem ser aprimorados em uma segunda fase do projeto. Essas melhorias não são necessárias para que a arquitetura inicial atenda aos requisitos definidos, mas representam oportunidades para aumentar o nível de segurança e governança da plataforma conforme o negócio cresça e a quantidade e sensibilidade dos dados aumentem.
+Como parte da evolução da solução, identificamos alguns pontos que podem ser aprimorados em uma segunda fase do projeto.
+
+Essas melhorias não são necessárias para que a arquitetura inicial atenda aos requisitos definidos, mas representam oportunidades para elevar o nível de segurança, governança, resiliência e maturidade operacional da plataforma conforme o negócio cresça.
+
+A Fase 02 não representa uma substituição da arquitetura atual.
+
+Ela parte da base construída na Fase 01 e avalia quais novos recursos e estratégias passam a fazer sentido à medida que aumentam o número de usuários, o volume de documentos, a criticidade da operação e a sensibilidade dos dados armazenados.
 
 ### 🔐 Fase 02 — Evolução da Segurança e Governança
 
@@ -407,7 +588,9 @@ Os serviços avaliados para esta etapa são:
 
 A adoção desses serviços deve ser avaliada considerando o crescimento da plataforma, o nível de sensibilidade dos documentos armazenados e o impacto financeiro de sua utilização.
 
-A proposta não é adicionar serviços simplesmente para aumentar a quantidade de componentes da arquitetura. Cada recurso deve ser incorporado quando houver uma necessidade concreta que justifique seu uso, considerando segurança, governança, complexidade operacional e custo.
+A proposta não é adicionar serviços simplesmente para aumentar a quantidade de componentes da arquitetura.
+
+Cada recurso deve ser incorporado quando houver uma necessidade concreta que justifique seu uso, considerando segurança, governança, complexidade operacional e custo.
 
 ### 🚀 Como a solução pode evoluir?
 
@@ -418,26 +601,31 @@ A evolução da plataforma pode ser analisada a partir de algumas perguntas impo
 - Como identificar e monitorar automaticamente a presença de informações sensíveis nos documentos armazenados?
 - Como melhorar o gerenciamento de credenciais e informações confidenciais utilizadas pela aplicação?
 - Como aumentar o controle sobre as chaves utilizadas para proteger os dados?
+- Como reduzir ainda mais o impacto de falhas e indisponibilidades em componentes críticos da solução?
+- Como estabelecer estratégias de recuperação e continuidade caso os requisitos de disponibilidade da plataforma se tornem mais rigorosos?
 - Como manter o crescimento da plataforma sustentável sem aumentar os custos de forma desproporcional?
 
 A Fase 02 representa, portanto, uma evolução natural da arquitetura, na qual mecanismos adicionais de segurança e governança podem ser incorporados conforme as necessidades do negócio se tornem mais complexas.
 
 ### 📈 Visão de futuro
 
-Em um cenário de crescimento da Startup XYZ, a arquitetura poderá evoluir para atender a um volume maior de usuários, documentos e processamento, mantendo os princípios que orientaram a solução desde sua concepção.
+Em um cenário de crescimento da Startup Jarva's, a arquitetura poderá evoluir para atender a um volume maior de usuários, documentos e processamento, mantendo os princípios que orientaram a solução desde sua concepção.
 
 Entre as possibilidades de evolução estão:
 
 - **Maior proteção criptográfica:** utilização do AWS KMS para ampliar o controle sobre as chaves criptográficas e os mecanismos de proteção dos dados.
 - **Gestão de informações sensíveis:** utilização do AWS Secrets Manager para centralizar e proteger credenciais e outros segredos utilizados pela aplicação.
 - **Descoberta de dados sensíveis:** utilização do Amazon Macie para identificar e classificar informações potencialmente sensíveis armazenadas no Amazon S3.
+- **Maior resiliência:** avaliação de mecanismos adicionais de recuperação e continuidade de negócio conforme os requisitos de disponibilidade e criticidade da plataforma aumentem.
 - **Maior governança:** ampliação dos mecanismos de auditoria, monitoramento e controle conforme a plataforma cresça.
 - **Escalabilidade:** evolução da arquitetura para suportar um aumento significativo no número de usuários e documentos sem depender de componentes individuais que limitem o crescimento.
 - **Otimização de custos:** revisão contínua das estratégias de armazenamento e utilização dos serviços conforme o comportamento real da aplicação.
 
-Essas melhorias não precisam necessariamente ser implementadas na primeira versão da solução. O objetivo desta etapa é demonstrar que a arquitetura foi pensada não apenas para atender ao cenário atual, mas também para permitir uma evolução consistente conforme o negócio cresça.
+Essas melhorias não precisam necessariamente ser implementadas na primeira versão da solução.
 
-> **A Fase 01 resolve o problema atual. A Fase 02 prepara a arquitetura para os desafios que surgem com o crescimento da plataforma.**
+O objetivo desta etapa é demonstrar que a arquitetura foi pensada não apenas para atender ao cenário atual, mas também para permitir uma evolução consistente conforme o negócio cresça.
+
+> **A Fase 01 resolve o problema atual. A Fase 02 prepara a arquitetura para os desafios que surgem com o crescimento e a maturidade da plataforma.**
 
 ---
 
@@ -451,7 +639,9 @@ Essas melhorias não precisam necessariamente ser implementadas na primeira vers
 
 # 7. Infraestrutura como Código
 
-A infraestrutura da solução foi planejada para ser reproduzível e consistente entre diferentes ambientes. A utilização de **Infrastructure as Code (IaC)** permite transformar a arquitetura definida no projeto em recursos provisionados por meio de código.
+A infraestrutura da solução foi planejada para ser reproduzível e consistente entre diferentes ambientes.
+
+A utilização de **Infrastructure as Code (IaC)** permite transformar a arquitetura definida no projeto em recursos provisionados por meio de código.
 
 > 🚧 **Em desenvolvimento**
 >
@@ -489,48 +679,45 @@ Agradecemos à **Escola da Nuvem**, aos professores, mentores e a todos os integ
 
 ### 1. Amazon S3 — Block Public Access
 
-Configurações de bloqueio de acesso público e como a configuração sobrepõe políticas que liberariam acesso público.
-
-https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html
+Configurações de bloqueio de acesso público e como essas configurações podem impedir políticas ou permissões que permitiriam acesso público aos objetos.
 
 ### 2. Amazon S3 — URLs pré-assinadas
 
-Como gerar URLs temporárias que concedem acesso restrito a um único objeto, sem tornar o bucket público.
+Documentação oficial sobre URLs pré-assinadas e como conceder acesso temporário e controlado a objetos armazenados no Amazon S3.
 
-https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html
+### 3. AWS re:Post — Acesso por prefixo
 
-### 3. AWS re:Post (Knowledge Center oficial da AWS) — Acesso por prefixo
-
-Exemplo oficial de política de IAM que usa a condição s3:prefix com variável de identidade para restringir cada usuário ao seu próprio prefixo dentro de um bucket compartilhado.
-
-https://repost.aws/knowledge-center/s3-folder-user-access
+Exemplo oficial de política de IAM que utiliza a condição `s3:prefix` e variáveis de identidade para restringir usuários aos seus próprios prefixos dentro de um bucket compartilhado.
 
 ### 4. Amazon S3 — Gerenciamento do ciclo de vida de objetos
 
-Como as regras de S3 Lifecycle transicionam objetos para classes de menor custo, com exemplos de uso para dados de retenção regulatória e histórica.
-
-https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html
+Documentação oficial sobre regras de S3 Lifecycle e transição de objetos entre diferentes classes de armazenamento, incluindo cenários de armazenamento histórico e de longo prazo.
 
 ### 5. Amazon API Gateway — Features
 
-Papel do API Gateway como camada de publicação, segurança, monitoramento e limitação de tráfego (throttling) de APIs, incluindo integração direta com AWS Lambda.
+Documentação sobre o papel do API Gateway como camada de publicação de APIs, integração com AWS Lambda, controle de tráfego e recursos de segurança e monitoramento.
 
-https://aws.amazon.com/api-gateway/features/
+### 6. AWS Lambda
 
-### 6. AWS Lambda (página de produto)
+Documentação oficial sobre o modelo de execução serverless, execução orientada a eventos, integração com outros serviços AWS e cobrança baseada no uso.
 
-Modelo de execução orientado a evento, exemplo oficial de acionamento por upload no S3, e cobrança por uso sem custo de infraestrutura ociosa.
+### 7. G1 Tecnologia — Reportagem jornalística
 
-https://aws.amazon.com/lambda/lambda-functions/
+Caso da Polícia de Xangai (2022): alegação de exposição de registros associados a cerca de 1 bilhão de cidadãos por uma possível falha de configuração em uma infraestrutura de dados.
 
-### 7. G1 Tecnologia — reportagem jornalística
+O caso é utilizado exclusivamente como contextualização do risco relacionado à exposição indevida de dados e não como comprovação técnica de uma exposição nessa escala.
 
-Caso da Polícia de Xangai (2022): alegação de exposição de registros associados a cerca de 1 bilhão de cidadãos por falha de configuração em nuvem — usado no Ato 1 como gancho de dor, não como fonte técnica AWS.
+### 8. IBM — Cost of a Data Breach Report 2026
 
-https://g1.globo.com/tecnologia/noticia/2022/07/04/hacker-alega-ter-roubado-da-policia-registros-de-1-bilhao-de-chineses.ghtml
+Relatório anual da IBM sobre custos, causas e impactos relacionados a violações de dados, utilizado como referência para contextualizar os riscos associados à segurança de informações e à evolução da Inteligência Artificial.
 
-### 8. IBM — Relatório do Custo das Violações de Dados
+### 9. Gartner — Worldwide AI Spending
 
-Estudo anual da IBM sobre custo e causas de violações de dados, usado no Ato 1 para sustentar que falhas de configuração são um problema recorrente, não um caso isolado.
+Projeções da Gartner sobre o crescimento dos investimentos globais em Inteligência Artificial e a importância crescente da infraestrutura necessária para suportar essas soluções.
 
-**Relatório do Custo das Violações de Dados 2026: O Ponto de Virada da IA (2026) — IBM.**
+---
+
+<p align="center">
+  <strong>☁️ Startup Jarva's</strong><br>
+  Plataforma SaaS de Gestão de Documentos com IA
+</p>
