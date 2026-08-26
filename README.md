@@ -311,7 +311,7 @@ Essa visão reforça um dos princípios centrais do projeto: **a segurança e a 
 A visão técnica da solução apresenta os serviços AWS utilizados e o fluxo principal de comunicação entre os componentes da arquitetura.
 
 <p align="center">
-  <img width="1536" height="1024" alt="Arquitetura AWS - Plataforma SaaS de Gestão de Documentos com IA" src="https://github.com/user-attachments/assets/a66c13f6-633b-4e12-8084-bc7727b39b90" />
+  <img width="1536" height="1024" alt="Image" src="https://github.com/user-attachments/assets/e90aaf15-e642-45ec-99ba-cd88689b85d8" />
 </p>
 
 O fluxo principal pode ser resumido da seguinte forma:
