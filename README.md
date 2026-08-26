@@ -29,6 +29,7 @@
   - [Arquitetura AWS](#arquitetura-aws)
   - [Arquitetura, AWS CAF e AWS Well-Architected Framework](#arquitetura-aws-caf-e-aws-well-architected-framework)
   - [Custos do projeto](#custos-do-projeto)
+  - [Evolução e Visão de Futuro — Fase 02](#evolução-e-visão-de-futuro--fase-02)
 - [6. Como o projeto foi desenvolvido](#6-como-o-projeto-foi-desenvolvido)
 - [7. Infraestrutura como Código](#7-infraestrutura-como-código)
   - [Guia de como testar a aplicação](#guia-de-como-testar-a-aplicação)
