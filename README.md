@@ -21,8 +21,19 @@
   - [Custo de armazenamento](#custo-de-armazenamento)
   - [O dilema central](#o-dilema-central)
 - [4. Requisitos de projeto e para a solução](#4-requisitos-de-projeto-e-para-a-solução)
-- [5. Da necessidade à solução](#5-da-necessidade-à-solução)
-- [6. Referências](#6-referências)
+- [5. Solução](#5-solução)
+  - [Da necessidade à solução](#da-necessidade-à-solução)
+  - [Arquitetura proposta](#arquitetura-proposta)
+  - [Serviços AWS utilizados](#serviços-aws-utilizados)
+  - [Jornada do cliente](#jornada-do-cliente)
+  - [AWS Well-Architected Framework e AWS CAF](#aws-well-architected-framework-e-aws-caf)
+  - [Custos do projeto](#custos-do-projeto)
+- [6. Como o projeto foi desenvolvido](#6-como-o-projeto-foi-desenvolvido)
+- [7. Infraestrutura como Código e Guia de Testes](#7-infraestrutura-como-código-e-guia-de-testes)
+  - [Código da infraestrutura](#código-da-infraestrutura)
+  - [Como testar a aplicação](#como-testar-a-aplicação)
+- [8. Agradecimentos](#8-agradecimentos)
+- [9. Referências](#9-referências)
 
 ---
 
@@ -209,7 +220,11 @@ A infraestrutura deve poder ser recriada de forma consistente, permitindo que a 
 
 ---
 
-# 5. Da necessidade à solução
+# 5. Solução
+
+Nesta seção, apresentaremos como os requisitos identificados ao longo da análise do problema foram traduzidos em decisões arquiteturais e em uma proposta de solução baseada nos serviços da AWS.
+
+## Da necessidade à solução
 
 A partir desses requisitos, fica claro que o desafio da Startup XYZ não está apenas em armazenar uma grande quantidade de documentos. A arquitetura precisa acompanhar o crescimento da empresa, proteger os dados de cada cliente, preservar o histórico como um ativo estratégico e, ao mesmo tempo, manter os custos sob controle.
 
@@ -219,49 +234,129 @@ A partir desses requisitos, fica claro que o desafio da Startup XYZ não está a
 
 ---
 
-# 6. Referências
+## Arquitetura proposta
+
+> 🚧 **Em desenvolvimento**
+>
+> Nesta seção será apresentada a arquitetura técnica da solução desenvolvida para a Startup Jarva's, incluindo o fluxo entre os serviços AWS e as principais decisões arquiteturais adotadas.
+
+<!-- INSERIR IMAGEM DA ARQUITETURA AWS -->
+
+---
+
+## Serviços AWS utilizados
+
+> 🚧 **Em desenvolvimento**
+>
+> Nesta seção serão apresentados os serviços AWS utilizados na solução, seus respectivos papéis na arquitetura e as justificativas técnicas para suas escolhas.
+
+---
+
+## Jornada do cliente
+
+> 🚧 **Em desenvolvimento**
+>
+> Esta seção apresentará a jornada do cliente dentro da plataforma, demonstrando o fluxo de utilização da solução desde o acesso inicial até o envio e a consulta dos documentos.
+
+<!-- INSERIR IMAGEM DA JORNADA DO CLIENTE -->
+
+---
+
+## AWS Well-Architected Framework e AWS CAF
+
+> 🚧 **Em desenvolvimento**
+>
+> Nesta seção será apresentada a relação entre as decisões adotadas no projeto e os princípios do AWS Well-Architected Framework e do AWS Cloud Adoption Framework (AWS CAF).
+
+---
+
+## Custos do projeto
+
+> 🚧 **Em desenvolvimento**
+>
+> Nesta seção será apresentada uma análise dos custos estimados da solução e das decisões adotadas para equilibrar os requisitos técnicos e a sustentabilidade financeira da arquitetura.
+
+---
+
+# 6. Como o projeto foi desenvolvido
+
+> 🚧 **Em desenvolvimento**
+>
+> Nesta seção será apresentado o processo de desenvolvimento do projeto, incluindo a organização do time, a divisão das atividades, o processo de tomada de decisão e a gestão do projeto ao longo das diferentes etapas.
+
+---
+
+# 7. Infraestrutura como Código e Guia de Testes
+
+## Código da infraestrutura
+
+> 🚧 **Em desenvolvimento**
+>
+> A infraestrutura do projeto será provisionada e documentada por meio de Infrastructure as Code (IaC), permitindo maior consistência, reprodutibilidade e facilidade na criação dos recursos necessários.
+
+<!-- INSERIR HYPERLINK PARA O CÓDIGO DA INFRAESTRUTURA -->
+
+## Como testar a aplicação
+
+> 🚧 **Em desenvolvimento**
+>
+> Nesta seção será disponibilizado um guia com as instruções necessárias para testar a aplicação e validar os principais fluxos da solução.
+
+---
+
+# 8. Agradecimentos
+
+> 🚧 **Em desenvolvimento**
+>
+> Esta seção será dedicada aos agradecimentos às pessoas e instituições que contribuíram para o desenvolvimento deste projeto.
+
+<!-- INSERIR FOTO DO GRUPO -->
+
+---
+
+# 9. Referências
 
 ### 1. Amazon S3 — Block Public Access
 
 Configurações de bloqueio de acesso público e como a configuração sobrepõe políticas que liberariam acesso público.
 
-https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html
+[https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html](https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html)
 
 ### 2. Amazon S3 — URLs pré-assinadas
 
 Como gerar URLs temporárias que concedem acesso restrito a um único objeto, sem tornar o bucket público.
 
-https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html
+[https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html](https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html)
 
 ### 3. AWS re:Post (Knowledge Center oficial da AWS) — Acesso por prefixo
 
 Exemplo oficial de política de IAM que usa a condição s3:prefix com variável de identidade para restringir cada usuário ao seu próprio prefixo dentro de um bucket compartilhado.
 
-https://repost.aws/knowledge-center/s3-folder-user-access
+[https://repost.aws/knowledge-center/s3-folder-user-access](https://repost.aws/knowledge-center/s3-folder-user-access)
 
 ### 4. Amazon S3 — Gerenciamento do ciclo de vida de objetos
 
 Como as regras de S3 Lifecycle transicionam objetos para classes de menor custo, com exemplos de uso para dados de retenção regulatória e histórica.
 
-https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html
+[https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html)
 
 ### 5. Amazon API Gateway — Features
 
 Papel do API Gateway como camada de publicação, segurança, monitoramento e limitação de tráfego (throttling) de APIs, incluindo integração direta com AWS Lambda.
 
-https://aws.amazon.com/api-gateway/features/
+[https://aws.amazon.com/api-gateway/features/](https://aws.amazon.com/api-gateway/features/)
 
 ### 6. AWS Lambda (página de produto)
 
 Modelo de execução orientado a evento, exemplo oficial de acionamento por upload no S3, e cobrança por uso sem custo de infraestrutura ociosa.
 
-https://aws.amazon.com/lambda/lambda-functions/
+[https://aws.amazon.com/lambda/lambda-functions/](https://aws.amazon.com/lambda/lambda-functions/)
 
 ### 7. G1 Tecnologia — reportagem jornalística
 
 Caso da Polícia de Xangai (2022): alegação de exposição de registros associados a cerca de 1 bilhão de cidadãos por falha de configuração em nuvem — usado no Ato 1 como gancho de dor, não como fonte técnica AWS.
 
-https://g1.globo.com/tecnologia/noticia/2022/07/04/hacker-alega-ter-roubado-da-policia-registros-de-1-bilhao-de-chineses.ghtml
+[https://g1.globo.com/tecnologia/noticia/2022/07/04/hacker-alega-ter-roubado-da-policia-registros-de-1-bilhao-de-chineses.ghtml](https://g1.globo.com/tecnologia/noticia/2022/07/04/hacker-alega-ter-roubado-da-policia-registros-de-1-bilhao-de-chineses.ghtml)
 
 ### 8. IBM — Relatório do Custo das Violações de Dados
 
