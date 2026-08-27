@@ -1,0 +1,408 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Startup Jarva's - Plataforma SaaS de Gestao de Documentos com IA (Fase 01 - MVP).
+  Arquitetura serverless: Cognito (autenticacao) -> API Gateway -> Lambda ->
+  DynamoDB (metadados) + S3 (armazenamento, versionamento, lifecycle e Object Lock).
+  Template escrito seguindo as praticas recomendadas do AWS CloudFormation:
+  https://docs.aws.amazon.com/pt_br/AWSCloudFormation/latest/UserGuide/best-practices.html
+
+# =============================================================================
+# PARAMETERS
+# Nenhum valor fixo (hardcoded) e nenhuma credencial no template.
+# Uso de restricoes de parametro (AllowedPattern / AllowedValues / Min-Max)
+# para que o CloudFormation rejeite valores invalidos antes de criar a pilha.
+# =============================================================================
+Parameters:
+  ProjectName:
+    Type: String
+    Default: jarvas
+    AllowedPattern: '^[a-z0-9-]{3,20}$'
+    Description: >
+      Prefixo usado para nomear todos os recursos da pilha. Apenas letras
+      minusculas, numeros e hifen.
+
+  EnvironmentName:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, hml, prod]
+    Description: Ambiente de implantacao (usado para reutilizar este mesmo template em dev/hml/prod).
+
+  LifecycleTransitionDays:
+    Type: Number
+    Default: 365
+    MinValue: 1
+    Description: >
+      Dias em S3 Standard antes da transicao automatica (S3 Lifecycle) para
+      S3 Glacier Deep Archive.
+
+  ObjectLockRetentionDays:
+    Type: Number
+    Default: 3650
+    MinValue: 1
+    Description: >
+      Periodo (em dias) de retencao aplicado por padrao pelo S3 Object Lock
+      (modo GOVERNANCE) a cada nova versao de objeto.
+
+  LogRetentionInDays:
+    Type: Number
+    Default: 90
+    AllowedValues: [30, 60, 90, 180, 365, 400, 545, 731]
+    Description: Retencao dos logs no CloudWatch Logs (Lambda e API Gateway).
+
+  CognitoCallbackUrl:
+    Type: String
+    Default: 'https://localhost:3000/callback'
+    Description: URL de callback do client do Cognito apos login (ajustar para o dominio real da aplicacao).
+
+  EnableTransferAcceleration:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['true', 'false']
+    Description: >
+      Habilita o S3 Transfer Acceleration para otimizar uploads de clientes
+      geograficamente distantes da regiao do bucket. Recurso opcional da Fase 01
+      (custo adicional por GB transferido) - habilitar apenas quando o cenario exigir.
+
+# =============================================================================
+# CONDITIONS
+# =============================================================================
+Conditions:
+  UseTransferAcceleration: !Equals [!Ref EnableTransferAcceleration, 'true']
+
+# =============================================================================
+# RESOURCES
+# Organizado por camada, seguindo a mesma separacao de responsabilidades
+# descrita na secao 5 do projeto (autenticacao, API, processamento,
+# metadados, armazenamento, observabilidade).
+# =============================================================================
+Resources:
+
+  # ---------------------------------------------------------------------------
+  # CAMADA DE AUTENTICACAO - Amazon Cognito
+  # ---------------------------------------------------------------------------
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Sub '${ProjectName}-users-${EnvironmentName}'
+      UsernameAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 12
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+      # MFA fica OFF na Fase 01 por escopo de MVP; avaliar OPTIONAL/ON na Fase 02.
+      MfaConfiguration: 'OFF'
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+      Tags:
+        Project: !Ref ProjectName
+        Environment: !Ref EnvironmentName
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: !Sub '${ProjectName}-client-${EnvironmentName}'
+      UserPoolId: !Ref UserPool
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      AllowedOAuthFlows: [code]
+      AllowedOAuthScopes: [openid, email, profile]
+      AllowedOAuthFlowsUserPoolClient: true
+      SupportedIdentityProviders: [COGNITO]
+      CallbackURLs:
+        - !Ref CognitoCallbackUrl
+
+  # ---------------------------------------------------------------------------
+  # CAMADA DE DADOS - Amazon S3 (documentos)
+  # Block Public Access, Versioning, Object Lock (GOVERNANCE) e Lifecycle
+  # para Glacier Deep Archive, conforme definido na politica de retencao.
+  # ---------------------------------------------------------------------------
+  DocumentsBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Sub '${ProjectName}-documents-${EnvironmentName}-${AWS::AccountId}'
+      # Versionamento e pre-requisito do Object Lock.
+      VersioningConfiguration:
+        Status: Enabled
+      ObjectLockEnabled: true
+      ObjectLockConfiguration:
+        ObjectLockEnabled: Enabled
+        Rule:
+          DefaultRetention:
+            Mode: GOVERNANCE
+            Days: !Ref ObjectLockRetentionDays
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      # Otimiza upload/download para clientes geograficamente distantes da
+      # regiao do bucket. Controlado pelo parametro EnableTransferAcceleration.
+      AccelerateConfiguration: !If
+        - UseTransferAcceleration
+        - AccelerationStatus: Enabled
+        - !Ref AWS::NoValue
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - Id: TransicaoParaGlacierDeepArchive
+            Status: Enabled
+            Transitions:
+              - TransitionInDays: !Ref LifecycleTransitionDays
+                StorageClass: DEEP_ARCHIVE
+            # Sem regra de Expiration: nenhum objeto e removido automaticamente.
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref EnvironmentName
+
+  # ---------------------------------------------------------------------------
+  # CAMADA DE DADOS - Amazon DynamoDB (metadados e propriedade dos documentos)
+  # ---------------------------------------------------------------------------
+  DocumentsMetadataTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: !Sub '${ProjectName}-documents-metadata-${EnvironmentName}'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: documentId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+        - AttributeName: documentId
+          KeyType: RANGE
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      SSESpecification:
+        SSEEnabled: true
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref EnvironmentName
+
+  # ---------------------------------------------------------------------------
+  # CAMADA DE PROCESSAMENTO - AWS Lambda + IAM (privilegio minimo)
+  # A role concede apenas as acoes estritamente necessarias, restritas aos
+  # ARNs dos recursos desta pilha - nada de "Resource: *" ou acoes coringa.
+  # ---------------------------------------------------------------------------
+  LambdaLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${ProjectName}-documents-handler-${EnvironmentName}'
+      RetentionInDays: !Ref LogRetentionInDays
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${ProjectName}-lambda-role-${EnvironmentName}'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: DynamoDBAccessMetadados
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:Query
+                Resource: !GetAtt DocumentsMetadataTable.Arn
+        - PolicyName: S3AccessDocumentos
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource: !Sub '${DocumentsBucket.Arn}/*'
+        - PolicyName: CloudWatchLogsAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !GetAtt LambdaLogGroup.Arn
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref EnvironmentName
+
+  DocumentsHandlerFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: LambdaLogGroup
+    Properties:
+      FunctionName: !Sub '${ProjectName}-documents-handler-${EnvironmentName}'
+      Description: >
+        Valida a propriedade do documento no DynamoDB e gera URLs pre-assinadas
+        para upload/leitura no bucket S3.
+      Runtime: nodejs20.x
+      Architectures: [arm64]
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      MemorySize: 256
+      Timeout: 10
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref DocumentsMetadataTable
+          BUCKET_NAME: !Ref DocumentsBucket
+      Code:
+        # Placeholder: substituir por referencia a um artefato real
+        # (S3Bucket/S3Key) publicado pelo pipeline de CI/CD antes do deploy.
+        ZipFile: |
+          exports.handler = async (event) => {
+            return {
+              statusCode: 501,
+              body: JSON.stringify({ message: 'Substituir pelo codigo real da aplicacao.' })
+            };
+          };
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref EnvironmentName
+
+  # ---------------------------------------------------------------------------
+  # CAMADA DE ENTRADA - Amazon API Gateway (HTTP API) com autorizacao via Cognito
+  # ---------------------------------------------------------------------------
+  ApiAccessLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/apigateway/${ProjectName}-${EnvironmentName}'
+      RetentionInDays: !Ref LogRetentionInDays
+
+  HttpApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub '${ProjectName}-api-${EnvironmentName}'
+      ProtocolType: HTTP
+
+  CognitoAuthorizer:
+    Type: AWS::ApiGatewayV2::Authorizer
+    Properties:
+      ApiId: !Ref HttpApi
+      AuthorizerType: JWT
+      Name: CognitoAuthorizer
+      IdentitySource:
+        - '$request.header.Authorization'
+      JwtConfiguration:
+        Audience:
+          - !Ref UserPoolClient
+        Issuer: !Sub 'https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPool}'
+
+  LambdaIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt DocumentsHandlerFunction.Arn
+      PayloadFormatVersion: '2.0'
+
+  DocumentsRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: 'ANY /documentos/{proxy+}'
+      AuthorizationType: JWT
+      AuthorizerId: !Ref CognitoAuthorizer
+      Target: !Sub 'integrations/${LambdaIntegration}'
+
+  ApiStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref HttpApi
+      StageName: !Ref EnvironmentName
+      AutoDeploy: true
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 100
+        ThrottlingRateLimit: 50
+      AccessLogSettings:
+        DestinationArn: !GetAtt ApiAccessLogGroup.Arn
+        Format: >-
+          {"requestId":"$context.requestId","ip":"$context.identity.sourceIp",
+          "requestTime":"$context.requestTime","httpMethod":"$context.httpMethod",
+          "routeKey":"$context.routeKey","status":"$context.status"}
+      Tags:
+        Project: !Ref ProjectName
+        Environment: !Ref EnvironmentName
+
+  ApiGatewayInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref DocumentsHandlerFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*'
+
+# =============================================================================
+# OUTPUTS
+# Expostos para consumo por outras pilhas (referencias entre pilhas) e para
+# uso no frontend/CI-CD, evitando hardcode de IDs em outros lugares.
+# =============================================================================
+Outputs:
+  ApiEndpoint:
+    Description: URL base da API
+    Value: !GetAtt HttpApi.ApiEndpoint
+    Export:
+      Name: !Sub '${AWS::StackName}-ApiEndpoint'
+
+  UserPoolId:
+    Description: ID do User Pool do Cognito
+    Value: !Ref UserPool
+    Export:
+      Name: !Sub '${AWS::StackName}-UserPoolId'
+
+  UserPoolClientId:
+    Description: ID do App Client do Cognito
+    Value: !Ref UserPoolClient
+    Export:
+      Name: !Sub '${AWS::StackName}-UserPoolClientId'
+
+  DocumentsBucketName:
+    Description: Nome do bucket S3 de documentos
+    Value: !Ref DocumentsBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-DocumentsBucketName'
+
+  DocumentsMetadataTableName:
+    Description: Nome da tabela DynamoDB de metadados
+    Value: !Ref DocumentsMetadataTable
+    Export:
+      Name: !Sub '${AWS::StackName}-DocumentsMetadataTableName'
+
+  LambdaFunctionArn:
+    Description: ARN da funcao Lambda de processamento
+    Value: !GetAtt DocumentsHandlerFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-LambdaFunctionArn'
