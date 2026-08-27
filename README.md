@@ -631,9 +631,56 @@ O objetivo desta etapa é demonstrar que a arquitetura foi pensada não apenas p
 
 # 6. Como o projeto foi desenvolvido
 
-> 🚧 **Em desenvolvimento**
->
-> Nesta seção será apresentada a forma como o projeto foi organizado e desenvolvido pela equipe, incluindo as principais etapas de análise, definição de requisitos, tomada de decisões técnicas e construção da proposta de solução.
+<p align="center">
+  <img width="1905" height="1065" alt="Image" src="https://github.com/user-attachments/assets/9b9cb4cf-11d1-4d90-8950-c318547d43de" />
+</p>
+
+O desenvolvimento do projeto foi conduzido a partir de uma abordagem de **gestão ágil**, combinando **Scrum**, **Kanban** e **PDCA** para organizar as atividades, acompanhar a evolução da solução e promover ciclos contínuos de análise, desenvolvimento e revisão.
+
+Como o projeto envolvia não apenas a construção de uma arquitetura técnica, mas também a análise do problema de negócio, o levantamento de requisitos, a avaliação de serviços AWS e a elaboração da documentação, cada uma dessas práticas contribuiu para uma dimensão diferente do processo.
+
+## Sprints semanais (Scrum)
+
+O trabalho foi organizado em **Sprints semanais**, nas quais eram definidos os principais objetivos do ciclo. Reuniões periódicas acompanhavam o andamento das tarefas, discutiam dificuldades, alinhavam decisões e revisavam entregas.
+
+Essa organização permitiu dividir um problema inicialmente amplo em entregas menores e progressivas: em vez de definir toda a arquitetura de uma só vez, as decisões foram amadurecidas conforme a equipe aprofundava sua compreensão do problema, dos requisitos e das possibilidades oferecidas pelos serviços AWS.
+
+## Quadro Kanban
+
+O fluxo de trabalho foi visualizado em um **quadro Kanban no Trello**, com as atividades organizadas em etapas — **To Do, In Progress, In Review e Done**. O quadro também centralizava anotações de contextualização, planejamento e sugestões, dando à equipe uma visão compartilhada do que precisava ser feito, do que estava em andamento e do que já havia sido concluído.
+
+## PDCA e melhoria contínua
+
+De forma complementar às Sprints, aplicamos o ciclo **PDCA (Plan, Do, Check, Act)** para avaliar e aprimorar continuamente as decisões:
+
+1. **Plan:** identificar prioridades e definir os objetivos do ciclo.
+2. **Do:** executar as atividades planejadas.
+3. **Check:** revisar resultados e decisões, identificando pontos de melhoria.
+4. **Act:** incorporar os aprendizados, ajustando o planejamento seguinte.
+
+Esse ciclo foi essencial porque várias decisões arquiteturais amadureceram ao longo do projeto: à medida que a análise dos requisitos avançava, novas necessidades e oportunidades de melhoria eram identificadas e incorporadas.
+
+## Como as abordagens se conectam
+
+**Scrum** deu estrutura aos ciclos de trabalho, **Kanban** trouxe visibilidade ao fluxo das atividades, e **PDCA** garantiu a avaliação e melhoria contínua do processo:
+
+**Planejamento → Sprint → Execução → Revisão → Ajustes → Próxima Sprint**
+
+Essa combinação equilibrou organização e flexibilidade — havia objetivos claros para cada ciclo, mas também espaço para revisar decisões conforme novos aspectos do problema surgiam.
+
+## Gestão das decisões e evolução da arquitetura
+
+As decisões não foram tratadas como tarefas técnicas isoladas: cada escolha foi relacionada aos requisitos do projeto, às necessidades do negócio e a aspectos como **segurança, escalabilidade, resiliência, disponibilidade, retenção e custos**. A evolução seguiu um fluxo progressivo:
+
+**Entendimento do problema → Levantamento de requisitos → Análise de alternativas → Definição da solução → Revisão → Evolução da arquitetura**
+
+Esse processo também permitiu distinguir o que era necessário para atender aos requisitos da **Fase 01** daquilo que poderia ser incorporado depois, como parte da evolução da plataforma. Recursos como **AWS KMS, AWS Secrets Manager e Amazon Macie**, por exemplo, foram reservados para uma possível **Fase 02**, evitando adicionar complexidade à arquitetura inicial sem uma necessidade concreta que a justificasse.
+
+## Resultado da abordagem de gestão
+
+A combinação de **Scrum, Kanban e PDCA** permitiu que a equipe acompanhasse a evolução da solução, revisasse decisões e incorporasse melhorias de forma incremental e colaborativa — resultando em um processo no qual **gestão e arquitetura evoluíram juntas**.
+
+> **O projeto não foi desenvolvido como uma sequência linear de decisões. Ele evoluiu em ciclos de planejamento, execução, revisão e melhoria contínua, permitindo que a solução amadurecesse junto com o entendimento do problema.**
 
 ---
 
