@@ -645,13 +645,6 @@ O template foi desenvolvido em **AWS CloudFormation**, seguindo as [práticas re
 
 [infrastructure.yaml](https://github.com/lbarretto/jarvas-aws-architecture/blob/main/infrastructure.yaml)
 
----
-
-## Guia de como testar a aplicação
-
-> 🚧 **Em desenvolvimento**
->
-> Nesta seção será disponibilizado um guia com as instruções necessárias para testar e validar o funcionamento da aplicação.
 
 ---
 
