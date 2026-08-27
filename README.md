@@ -418,7 +418,9 @@ A arquitetura foi projetada para responder diretamente aos principais desafios i
 
 Dessa forma, a arquitetura transforma os principais desafios do negócio em decisões técnicas, buscando equilibrar **segurança, acesso, preservação histórica, escalabilidade e sustentabilidade dos custos**.
 
-O fluxo principal pode ser resumido da seguinte forma:
+### Fluxo principal (requisição em tempo real)
+
+O fluxo abaixo representa o caminho síncrono de uma requisição do usuário, do login até o armazenamento do documento:
 
 1. O usuário realiza o login na plataforma utilizando o **Amazon Cognito**.
 2. Após a autenticação, o usuário recebe os tokens necessários para acessar a aplicação.
@@ -428,17 +430,12 @@ O fluxo principal pode ser resumido da seguinte forma:
 6. Após a validação, a aplicação gera uma URL pré-assinada para a operação solicitada no **Amazon S3**.
 7. O usuário realiza o upload ou download diretamente no S3 utilizando essa autorização temporária.
 8. Os documentos permanecem armazenados em um bucket privado.
-9. Durante os primeiros 12 meses, os documentos permanecem no **S3 Standard**.
-10. Após esse período, uma regra de **S3 Lifecycle** pode realizar a transição dos documentos para o **S3 Glacier Deep Archive**.
-11. O **S3 Object Lock** protege os objetos de acordo com o período de retenção configurado.
+
+A gestão do ciclo de vida dos documentos (transição para o S3 Glacier Deep Archive após 12 meses e proteção via S3 Object Lock) não faz parte desse fluxo síncrono — ela já foi detalhada nas seções [Estratégia de armazenamento](#estratégia-de-armazenamento) e [Preservação dos documentos](#preservação-dos-documentos), acima.
+
+O **S3 Transfer Acceleration** atua na transferência dos arquivos entre clientes geograficamente distribuídos e o Amazon S3, quando esse recurso estiver habilitado para o cenário.
 
 Além do fluxo principal, a arquitetura incorpora mecanismos de observabilidade, auditoria, controle de acesso, otimização de custos e infraestrutura como código.
-
-É importante destacar que serviços como **S3 Lifecycle**, **S3 Glacier Deep Archive** e **S3 Object Lock** não representam etapas pelas quais uma requisição do usuário necessariamente passa em tempo real.
-
-Eles fazem parte da estratégia de gerenciamento e preservação dos dados ao longo de seu ciclo de vida.
-
-O **S3 Transfer Acceleration**, por sua vez, atua na transferência dos arquivos entre clientes geograficamente distribuídos e o Amazon S3, quando esse recurso estiver habilitado para o cenário.
 
 ---
 
