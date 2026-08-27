@@ -418,29 +418,60 @@ A arquitetura foi projetada para responder diretamente aos principais desafios i
 
 Dessa forma, a arquitetura transforma os principais desafios do negócio em decisões técnicas, buscando equilibrar **segurança, acesso, preservação histórica, escalabilidade e sustentabilidade dos custos**.
 
-O fluxo principal pode ser resumido da seguinte forma:
+A jornada foi organizada em três momentos principais:
 
-1. O usuário realiza o login na plataforma utilizando o **Amazon Cognito**.
-2. Após a autenticação, o usuário recebe os tokens necessários para acessar a aplicação.
-3. As solicitações são enviadas para o **Amazon API Gateway**, que atua como ponto de entrada da API.
-4. O **AWS Lambda** processa a solicitação e aplica as regras de negócio.
-5. Quando necessário, a função consulta os metadados no **Amazon DynamoDB** para validar a propriedade e a autorização relacionadas ao documento.
-6. Após a validação, a aplicação gera uma URL pré-assinada para a operação solicitada no **Amazon S3**.
-7. O usuário realiza o upload ou download diretamente no S3 utilizando essa autorização temporária.
-8. Os documentos permanecem armazenados em um bucket privado.
-9. Durante os primeiros 12 meses, os documentos permanecem no **S3 Standard**.
-10. Após esse período, uma regra de **S3 Lifecycle** pode realizar a transição dos documentos para o **S3 Glacier Deep Archive**.
-11. O **S3 Object Lock** protege os objetos de acordo com o período de retenção configurado.
+**1. Acesso e envio**
+O cliente acessa a plataforma, realiza sua autenticação e envia um documento para o processamento da aplicação. Nesse momento, o objetivo é proporcionar uma experiência simples ao usuário sem abrir mão da segurança e da identificação correta da propriedade do documento.
 
-Além do fluxo principal, a arquitetura incorpora mecanismos de observabilidade, auditoria, controle de acesso, otimização de custos e infraestrutura como código.
+**2. Proteção e utilização**
+Após o envio, o documento é associado à conta do cliente e armazenado de forma segura. Quando o usuário deseja consultar ou baixar um arquivo, a plataforma verifica sua identidade e suas permissões antes de liberar o acesso. Dessa forma, o cliente não recebe acesso irrestrito ao ambiente de armazenamento. O acesso é concedido somente ao documento solicitado e de forma controlada.
 
-É importante destacar que serviços como **S3 Lifecycle**, **S3 Glacier Deep Archive** e **S3 Object Lock** não representam etapas pelas quais uma requisição do usuário necessariamente passa em tempo real.
-
-Eles fazem parte da estratégia de gerenciamento e preservação dos dados ao longo de seu ciclo de vida.
-
-O **S3 Transfer Acceleration**, por sua vez, atua na transferência dos arquivos entre clientes geograficamente distribuídos e o Amazon S3, quando esse recurso estiver habilitado para o cenário.
+**3. Preservação histórica**
+Com o passar do tempo, os documentos continuam preservados como parte do histórico da empresa. Durante os primeiros 12 meses, os arquivos permanecem em uma classe adequada ao acesso frequente. Após esse período, a estratégia de ciclo de vida permite realizar a transição para uma classe de armazenamento histórico de menor custo, mantendo os documentos preservados para futuras necessidades do negócio. Essa visão reforça um dos princípios centrais do projeto: A segurança e a preservação dos dados devem estar presentes durante toda a jornada do cliente, e não apenas no momento do armazenamento.
 
 ---
+
+### Arquitetura AWS
+
+A visão técnica da solução apresenta os serviços AWS utilizados e o fluxo principal de comunicação entre os componentes da arquitetura.
+
+```mermaid
+graph TD
+    User([Usuário])
+    
+    subgraph "Segurança & Autenticação"
+        Cognito[Amazon Cognito]
+    end
+
+    subgraph "Camada de API & Computação"
+        APIGW[Amazon API Gateway]
+        Lambda[AWS Lambda]
+    end
+
+    subgraph "Armazenamento & Banco de Dados"
+        Dynamo[(Amazon DynamoDB<br/>Metadados)]
+        S3[Amazon S3<br/>Bucket Privado / Standard]
+        Glacier[S3 Glacier Deep Archive<br/>Retenção > 12 meses]
+    end
+
+    User -- "1. Login" --> Cognito
+    Cognito -- "2. Retorna Tokens" --> User
+    User -- "3. Requisição via API" --> APIGW
+    APIGW -- "4. Aciona lógica" --> Lambda
+    Lambda -- "5. Valida permissões" --> Dynamo
+    Lambda -- "6. Gera URL pré-assinada" --> S3
+    Lambda -- "7. Retorna URL" --> User
+    User -- "8. Upload/Download direto" --> S3
+    
+    S3 -. "Object Lock<br/>(Proteção contra exclusão)" .- S3
+    S3 -. "S3 Lifecycle<br/>(Após 12 meses)" .-> Glacier
+
+```
+Além do fluxo principal, a arquitetura incorpora mecanismos de observabilidade, auditoria, controle de acesso, otimização de custos e infraestrutura como código.
+
+É importante destacar que serviços como S3 Lifecycle, S3 Glacier Deep Archive e S3 Object Lock não representam etapas pelas quais uma requisição do usuário necessariamente passa em tempo real. Eles fazem parte da estratégia de gerenciamento e preservação dos dados ao longo de seu ciclo de vida.
+
+O S3 Transfer Acceleration, por sua vez, atua na transferência dos arquivos entre clientes geograficamente distribuídos e o Amazon S3, quando esse recurso estiver habilitado para o cenário.
 
 ## Resiliência e tolerância a falhas
 
