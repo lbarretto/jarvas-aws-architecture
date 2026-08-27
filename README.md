@@ -632,11 +632,13 @@ A combinação de **Scrum, Kanban e PDCA** permitiu que a equipe acompanhasse a 
 
 # 7. Infraestrutura como Código
 
-A infraestrutura da solução foi planejada para ser reproduzível e consistente entre diferentes ambientes.
+A infraestrutura da solução foi desenvolvida seguindo o conceito de **Infrastructure as Code (IaC)**, permitindo que os recursos necessários para a arquitetura sejam definidos e provisionados por meio de código.
 
-A utilização de **Infrastructure as Code (IaC)** permite transformar a arquitetura definida no projeto em recursos provisionados por meio de código.
+Essa abordagem contribui para que a infraestrutura seja **reproduzível, consistente e versionável**, reduzindo a dependência de configurações manuais e facilitando a criação de ambientes com a mesma estrutura arquitetural.
 
-O template foi desenvolvido em **AWS CloudFormation**, seguindo as [práticas recomendadas oficiais da AWS](https://docs.aws.amazon.com/pt_br/AWSCloudFormation/latest/UserGuide/best-practices.html) para criação de modelos, gerenciamento de pilhas e controle de acesso via IAM.
+Para este projeto, a infraestrutura foi implementada utilizando o **AWS CloudFormation**, por meio de um template que descreve os recursos e suas configurações. O desenvolvimento do modelo também considerou as [práticas recomendadas oficiais da AWS](https://docs.aws.amazon.com/pt_br/AWSCloudFormation/latest/UserGuide/best-practices.html), incluindo aspectos relacionados à criação de templates, ao gerenciamento de pilhas e ao controle de acesso por meio do AWS IAM.
+
+Dessa forma, a arquitetura deixa de existir apenas como um diagrama conceitual e passa a poder ser representada e provisionada de forma estruturada por meio de código.
 
 ### 🔗 Acesse o código da infraestrutura
 
