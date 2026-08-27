@@ -639,13 +639,11 @@ A infraestrutura da solução foi planejada para ser reproduzível e consistente
 
 A utilização de **Infrastructure as Code (IaC)** permite transformar a arquitetura definida no projeto em recursos provisionados por meio de código.
 
-> 🚧 **Em desenvolvimento**
->
-> O código da infraestrutura e sua documentação serão disponibilizados nesta seção.
+O template foi desenvolvido em **AWS CloudFormation**, seguindo as [práticas recomendadas oficiais da AWS](https://docs.aws.amazon.com/pt_br/AWSCloudFormation/latest/UserGuide/best-practices.html) para criação de modelos, gerenciamento de pilhas e controle de acesso via IAM.
 
 ### 🔗 Acesse o código da infraestrutura
 
-> **[Inserir aqui o hyperlink para o repositório ou diretório contendo o código de Infrastructure as Code]**
+[infrastructure.yaml](https://github.com/lbarretto/jarvas-aws-architecture/blob/main/infrastructure.yaml)
 
 ---
 
