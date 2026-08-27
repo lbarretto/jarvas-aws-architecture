@@ -290,27 +290,15 @@ A arquitetura também separa responsabilidades importantes do sistema:
 
 ## Visão geral da solução
 
-A solução foi projetada para que o cliente possa enviar e acessar documentos sem receber acesso direto e irrestrito ao ambiente de armazenamento.
+A solução foi projetada para permitir que os clientes enviem e acessem seus documentos de forma segura, sem receber acesso direto ou irrestrito ao ambiente de armazenamento.
 
-O fluxo começa com a autenticação do usuário por meio do **Amazon Cognito**.
+O fluxo começa com a autenticação do usuário pelo **Amazon Cognito**. Após a autenticação, as solicitações são direcionadas ao **Amazon API Gateway** e processadas pelo **AWS Lambda**, responsável por aplicar as regras de negócio e validar as permissões necessárias.
 
-Após a autenticação, o usuário recebe os tokens necessários para acessar a aplicação e realizar solicitações à API.
+Os metadados e as informações de propriedade dos documentos são armazenados no **Amazon DynamoDB**, permitindo verificar se o usuário possui autorização para acessar determinado arquivo.
 
-As requisições são direcionadas ao **Amazon API Gateway**, que atua como ponto de entrada da API e integra-se à lógica da aplicação.
+Os documentos são armazenados em um bucket privado do **Amazon S3**. Após a validação das permissões, o acesso é concedido por meio de **URLs pré-assinadas e temporárias**, limitadas à operação solicitada e a um período determinado.
 
-As solicitações são encaminhadas para funções do **AWS Lambda**, responsáveis por aplicar as regras de negócio e validar se o usuário possui autorização para realizar determinada operação.
-
-Os metadados dos documentos e as informações de propriedade são armazenados no **Amazon DynamoDB**.
-
-Dessa forma, antes de permitir operações como consulta, download ou geração de uma URL de acesso, a aplicação pode verificar a relação entre o usuário autenticado e o documento solicitado.
-
-Os arquivos são armazenados em um bucket privado do **Amazon S3**, organizado de acordo com a estrutura definida pela aplicação.
-
-O acesso aos objetos ocorre por meio de **URLs pré-assinadas e temporárias**, geradas somente após a validação das permissões necessárias.
-
-Essa abordagem contribui para o isolamento entre clientes e evita a exposição pública do bucket.
-
-O usuário recebe autorização apenas para realizar a operação específica solicitada e dentro de um período limitado.
+Dessa forma, a solução contribui para o **isolamento entre clientes**, evita a exposição pública dos documentos e garante que cada usuário tenha acesso apenas aos arquivos para os quais possui autorização.
 
 ### Estratégia de armazenamento
 
@@ -416,6 +404,20 @@ A visão técnica da solução apresenta os serviços AWS utilizados e o fluxo p
   <img width="1536" height="1024" alt="Arquitetura AWS - Plataforma SaaS de Gestão de Documentos com IA" src="https://github.com/user-attachments/assets/e90aaf15-e642-45ec-99ba-cd88689b85d8" />
 </p>
 
+### Como a arquitetura resolve o problema?
+
+A arquitetura foi projetada para responder diretamente aos principais desafios identificados pela Startup Jarva's.
+
+- **Segurança e isolamento:** a autenticação pelo Amazon Cognito, as validações realizadas pela aplicação e o uso de URLs pré-assinadas permitem controlar o acesso aos documentos sem expor diretamente o ambiente de armazenamento.
+
+- **Retenção e preservação histórica:** o Amazon S3 oferece uma base durável para o armazenamento dos documentos, enquanto o S3 Object Lock contribui para protegê-los contra exclusões ou alterações durante o período de retenção definido.
+
+- **Crescimento e escalabilidade:** a utilização de serviços serverless e gerenciados permite que a solução acompanhe o aumento no número de usuários e documentos sem depender de servidores administrados individualmente pela equipe.
+
+- **Controle de custos:** o S3 Lifecycle permite adaptar o armazenamento ao ciclo de vida dos documentos, mantendo arquivos recentes disponíveis para acesso frequente e transferindo documentos históricos para classes de menor custo.
+
+Dessa forma, a arquitetura transforma os principais desafios do negócio em decisões técnicas, buscando equilibrar **segurança, acesso, preservação histórica, escalabilidade e sustentabilidade dos custos**.
+
 O fluxo principal pode ser resumido da seguinte forma:
 
 1. O usuário realiza o login na plataforma utilizando o **Amazon Cognito**.
@@ -482,75 +484,22 @@ Dessa forma, a resiliência é tratada como um princípio presente desde a conce
 
 ---
 
-## Arquitetura, AWS CAF e AWS Well-Architected Framework
+# Arquitetura, AWS CAF e AWS Well-Architected Framework
 
-A construção da solução também foi orientada por boas práticas de arquitetura em nuvem, considerando princípios presentes no **AWS Cloud Adoption Framework (AWS CAF)** e no **AWS Well-Architected Framework**.
+A construção da solução foi orientada por boas práticas de arquitetura em nuvem, considerando princípios do **AWS Cloud Adoption Framework (AWS CAF)** e do **AWS Well-Architected Framework**.
 
-O AWS CAF contribui para analisar a adoção da nuvem de forma mais ampla, considerando aspectos que vão além da tecnologia.
+O **AWS CAF** ajuda a analisar a adoção da nuvem de forma ampla, relacionando a arquitetura às necessidades do negócio, à segurança, à operação e à gestão dos recursos. Já o **AWS Well-Architected Framework** oferece princípios técnicos para avaliar se a arquitetura está sendo construída de forma segura, confiável, eficiente e sustentável.
 
-No contexto deste projeto, ele ajuda a relacionar a arquitetura às necessidades do negócio, à segurança, à operação e à gestão dos recursos utilizados.
+A relação da arquitetura com esses princípios pode ser resumida assim:
 
-Já o AWS Well-Architected Framework oferece princípios técnicos para avaliar se uma arquitetura está sendo construída de maneira segura, confiável, eficiente e sustentável.
-
-A relação da arquitetura com esses princípios pode ser observada da seguinte forma:
-
-### 🔐 Segurança
-
-O projeto prioriza a autenticação dos usuários, o controle de permissões e a validação da propriedade dos documentos antes da liberação do acesso.
-
-O **Amazon Cognito**, o **AWS IAM**, o **Amazon API Gateway**, o **AWS Lambda** e o uso de URLs pré-assinadas contribuem para que o acesso aos dados seja controlado e limitado às operações autorizadas.
-
-Os objetos armazenados no Amazon S3 também são protegidos por criptografia server-side.
-
-Na Fase 02, o **AWS KMS** poderá ser incorporado para ampliar o controle sobre as chaves criptográficas.
-
-### 📈 Escalabilidade e performance
-
-A utilização de serviços serverless permite que a solução acompanhe a demanda sem depender de uma única máquina responsável pelo processamento das solicitações.
-
-O **Amazon API Gateway**, o **AWS Lambda**, o **Amazon DynamoDB** e o **Amazon S3** oferecem uma base gerenciada para o crescimento da aplicação.
-
-O **S3 Transfer Acceleration** complementa essa estratégia ao otimizar a transferência de arquivos em cenários nos quais os clientes estão geograficamente distribuídos.
-
-### 🛡️ Confiabilidade e resiliência
-
-A arquitetura foi projetada para reduzir a dependência de componentes individuais administrados pela equipe.
-
-A utilização de serviços gerenciados como **Amazon Cognito**, **Amazon API Gateway**, **AWS Lambda**, **Amazon DynamoDB** e **Amazon S3** permite que a aplicação se apoie em uma infraestrutura fornecida e operada pela AWS, sem depender de um único servidor responsável pelo funcionamento da plataforma.
-
-Essa escolha contribui para a resiliência da solução, reduzindo pontos únicos de falha associados à infraestrutura tradicional e permitindo que a aplicação acompanhe o crescimento do negócio sem exigir o gerenciamento direto de servidores.
-
-Além disso, o **Amazon CloudWatch** permite acompanhar o comportamento operacional da aplicação e identificar possíveis falhas, enquanto a infraestrutura como código facilita a reprodução consistente do ambiente quando necessário.
-
-### 🗂️ Durabilidade e preservação histórica
-
-O **Amazon S3** oferece uma base durável para o armazenamento dos documentos, enquanto a estratégia de ciclo de vida permite preservar o histórico ao longo do tempo.
-
-Durante os primeiros 12 meses, os documentos permanecem no **S3 Standard**.
-
-Após esse período, o **S3 Lifecycle** pode realizar a transição para o **S3 Glacier Deep Archive**, permitindo reduzir os custos de armazenamento dos documentos históricos sem eliminá-los.
-
-O **S3 Object Lock** reforça a proteção dos objetos contra exclusão ou alteração durante o período de retenção configurado.
-
-Essa combinação permite tratar os documentos não apenas como arquivos armazenados, mas como um ativo histórico que continua disponível para gerar valor para o negócio ao longo do tempo.
-
-### 💰 Otimização de custos
-
-A arquitetura reconhece que documentos recentes e históricos possuem padrões de acesso diferentes.
-
-Por esse motivo, a estratégia de **S3 Lifecycle** e **S3 Glacier Deep Archive** permite adequar a classe de armazenamento ao comportamento esperado dos dados.
-
-Os documentos permanecem inicialmente em uma classe adequada ao acesso frequente e, após 12 meses, podem ser transferidos para uma classe voltada ao armazenamento histórico de longo prazo.
-
-Além disso, serviços serverless reduzem a necessidade de manter servidores provisionados e ociosos exclusivamente para suportar a aplicação.
-
-### 📊 Excelência operacional
-
-O **Amazon CloudWatch** permite acompanhar logs, métricas e possíveis alarmes relacionados à operação da solução.
-
-O **AWS CloudTrail** complementa essa visão mantendo registros das ações realizadas, contribuindo para auditoria e governança.
-
-Por fim, o **AWS CloudFormation** permite que a infraestrutura seja provisionada e reproduzida por meio de código, reduzindo inconsistências entre ambientes e facilitando a evolução da arquitetura.
+| Pilar | Foco | Serviços AWS envolvidos | Como contribui |
+|---|---|---|---|
+| 🔐 **Segurança** | Autenticação, controle de permissões e validação de propriedade dos documentos | Amazon Cognito, AWS IAM, Amazon API Gateway, AWS Lambda, URLs pré-assinadas, Amazon S3 (criptografia server-side) | Garante que o acesso aos dados seja controlado e limitado às operações autorizadas. Na Fase 02, o AWS KMS poderá ampliar o controle sobre as chaves criptográficas. |
+| 📈 **Escalabilidade e performance** | Acompanhar a demanda sem depender de uma única máquina | Amazon API Gateway, AWS Lambda, Amazon DynamoDB, Amazon S3, S3 Transfer Acceleration | Serviços serverless oferecem uma base gerenciada para o crescimento da aplicação; o Transfer Acceleration otimiza transferências para clientes geograficamente distribuídos. |
+| 🛡️ **Confiabilidade e resiliência** | Reduzir a dependência de componentes individuais administrados pela equipe | Amazon Cognito, Amazon API Gateway, AWS Lambda, Amazon DynamoDB, Amazon S3, Amazon CloudWatch, infraestrutura como código | Apoia-se em infraestrutura gerenciada pela AWS, reduzindo pontos únicos de falha. O CloudWatch monitora o comportamento operacional e a IaC garante reprodução consistente do ambiente. |
+| 🗂️ **Durabilidade e preservação histórica** | Armazenamento durável e preservação do histórico de documentos | Amazon S3, S3 Lifecycle, S3 Glacier Deep Archive, S3 Object Lock | Documentos ficam no S3 Standard nos primeiros 12 meses e depois migram para o Glacier Deep Archive, reduzindo custos sem eliminá-los. O Object Lock protege contra exclusão/alteração durante a retenção. |
+| 💰 **Otimização de custos** | Adequar a classe de armazenamento ao padrão de acesso dos dados | S3 Lifecycle, S3 Glacier Deep Archive, serviços serverless | Documentos recentes ficam em classe de acesso frequente e migram para armazenamento histórico após 12 meses. Serverless elimina a necessidade de servidores provisionados e ociosos. |
+| 📊 **Excelência operacional** | Monitoramento, auditoria e reprodutibilidade da infraestrutura | Amazon CloudWatch, AWS CloudTrail, AWS CloudFormation | CloudWatch acompanha logs, métricas e alarmes; CloudTrail registra ações para auditoria e governança; CloudFormation permite provisionar e reproduzir a infraestrutura como código. |
 
 ---
 
