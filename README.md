@@ -59,7 +59,7 @@ O desafio representa uma oportunidade de sair de uma abordagem puramente conceit
 
 Mais do que simplesmente selecionar serviços da AWS, o objetivo do projeto é compreender o problema apresentado, identificar suas necessidades e restrições e, a partir disso, avaliar como diferentes recursos da nuvem podem agregar valor ao negócio.
 
-Essa abordagem também nos levou a perceber que o projeto não trata apenas de armazenamento de arquivos. Os documentos possuem um ciclo de vida, diferentes níveis de utilização ao longo do tempo, requisitos de segurança e um valor estratégico para o negócio.
+Essa abordagem também nos levou a perceber que o projeto envolve muito mais do que armazenamento de arquivos. Os documentos possuem um ciclo de vida, diferentes níveis de utilização ao longo do tempo, requisitos de segurança e um valor estratégico para o negócio.
 
 Dessa forma, decisões relacionadas à organização, acesso, retenção e custo dos dados passam a fazer parte da própria arquitetura da solução.
 
@@ -67,7 +67,7 @@ Dessa forma, decisões relacionadas à organização, acesso, retenção e custo
 
 O tema se torna especialmente relevante quando consideramos o crescimento da utilização de Inteligência Artificial e a importância dos dados que alimentam essas soluções.
 
-No cenário proposto, os documentos enviados pelos clientes não são apenas arquivos que precisam ser armazenados. Eles representam a base histórica utilizada para a evolução futura dos modelos de IA da empresa.
+No cenário proposto, os documentos enviados pelos clientes representam a base histórica utilizada para a evolução futura dos modelos de IA da empresa.
 
 Assim, garantir que esses dados estejam organizados, protegidos, disponíveis quando necessários e economicamente sustentáveis ao longo do tempo é parte fundamental da estratégia do negócio.
 
@@ -89,7 +89,7 @@ No caso da Startup Jarva's, essa relação é particularmente importante porque 
 
 > **Toda essa evolução da IA depende de algo fundamental: dados bem armazenados, organizados, protegidos e disponíveis para utilização. Não existe IA de qualidade sem uma base de dados histórica adequada por trás.**
 
-Portanto, o projeto não foi escolhido apenas por envolver serviços populares de computação em nuvem ou Inteligência Artificial. Ele representa um problema cada vez mais relevante:
+O projeto, portanto, representa um problema cada vez mais relevante:
 
 > **Como construir uma infraestrutura capaz de transformar o crescimento da quantidade de dados em um ativo estratégico, sem comprometer segurança, disponibilidade e sustentabilidade financeira?**
 
@@ -103,7 +103,7 @@ Como parte desse serviço, a plataforma recebe documentos enviados pelos cliente
 
 O volume previsto é de aproximadamente **50 mil novos arquivos por mês**, equivalente a cerca de **600 mil arquivos por ano**, com tendência de crescimento contínuo.
 
-À primeira vista, o problema poderia parecer simplesmente uma questão de armazenamento. Entretanto, o cenário possui uma característica que muda completamente a forma como o problema deve ser tratado:
+O cenário possui uma característica que muda completamente a forma como o problema deve ser tratado:
 
 > **Os arquivos não podem ser deletados.**
 
@@ -113,13 +113,11 @@ Portanto, à medida que a empresa cresce, sua quantidade de dados também cresce
 
 Em poucos anos, a plataforma poderá acumular milhões de documentos. Esse histórico representa não apenas uma grande quantidade de dados, mas um ativo intelectual que pode contribuir diretamente para a evolução da empresa e de seus modelos de IA.
 
-É justamente por isso que entendemos que a Startup Jarva's não está simplesmente construindo um repositório de documentos.
+É justamente por isso que entendemos que a Startup Jarva's não está simplesmente construindo um repositório de documentos:
 
 > **Um repositório preserva informações. Um ativo de dados preserva informações com a intenção de gerar valor a partir delas.**
 
-Essa mudança de perspectiva é fundamental para compreender o restante do projeto.
-
-O armazenamento deixa de ser apenas uma infraestrutura de apoio e passa a fazer parte da própria estratégia do produto.
+Essa mudança de perspectiva é fundamental para compreender o restante do projeto. O armazenamento deixa de ser apenas uma infraestrutura de apoio e passa a fazer parte da própria estratégia do produto.
 
 ---
 
@@ -145,17 +143,13 @@ O risco associado a esse problema não é apenas teórico. O próprio documento 
 >
 > O exemplo é utilizado como contextualização do risco associado a configurações inadequadas de infraestrutura e exposição indevida de dados.
 
-O ponto principal, entretanto, não é afirmar que esse caso representa uma exposição comprovada naquela escala.
-
 O valor do exemplo está em demonstrar o tipo de risco que a Startup Jarva's precisa evitar:
 
 > **Uma configuração ou implantação inadequada pode transformar uma infraestrutura que deveria proteger dados em uma porta de acesso a eles.**
 
 Isso é especialmente relevante para a Startup Jarva's porque a plataforma dependerá da confiança de clientes que estarão entregando seus próprios documentos ao serviço.
 
-Uma exposição de dados, portanto, não seria apenas um incidente técnico. Ela poderia comprometer a confiança dos clientes na plataforma e, consequentemente, a própria proposta de valor da empresa.
-
-Por esse motivo:
+Uma exposição de dados comprometeria a confiança dos clientes na plataforma e, consequentemente, a própria proposta de valor da empresa. Por esse motivo:
 
 > **Segurança não deve ser uma camada adicionada posteriormente. Ela precisa fazer parte da arquitetura desde o primeiro arquivo recebido pela plataforma.**
 
@@ -167,9 +161,7 @@ Ao contrário de sistemas em que dados antigos podem ser descartados, a Startup 
 
 > **Nenhum arquivo deve ser excluído como parte da operação normal da plataforma.**
 
-Os documentos representam a base histórica que poderá ser utilizada para o treinamento dos próximos modelos de IA.
-
-Dessa forma, o fato de um documento ser antigo não significa que ele perdeu seu valor. Pelo contrário, ele passa a fazer parte do patrimônio histórico de dados da empresa.
+Os documentos representam a base histórica que poderá ser utilizada para o treinamento dos próximos modelos de IA. O fato de um documento ser antigo não significa que ele perdeu seu valor — pelo contrário, ele passa a fazer parte do patrimônio histórico de dados da empresa.
 
 Em números, o cenário prevê aproximadamente **50 mil arquivos por mês**, o equivalente a cerca de **600 mil arquivos por ano**.
 
@@ -208,11 +200,7 @@ A partir desses problemas, identificamos quatro necessidades que precisam ser at
 
 É justamente a combinação dessas necessidades que torna o problema mais interessante.
 
-A Startup Jarva's não pode simplesmente escolher a alternativa mais barata, porque isso poderia prejudicar o acesso aos documentos.
-
-Da mesma forma, não pode manter todo o histórico permanentemente em uma classe de armazenamento voltada para acesso frequente, porque o custo cresceria junto com a base histórica.
-
-E também não pode priorizar apenas a facilidade de acesso sem considerar o isolamento entre clientes.
+A Startup Jarva's não pode simplesmente escolher a alternativa mais barata, porque isso poderia prejudicar o acesso aos documentos. Da mesma forma, não pode manter todo o histórico permanentemente em uma classe de armazenamento voltada para acesso frequente, porque o custo cresceria junto com a base histórica. E também não pode priorizar apenas a facilidade de acesso sem considerar o isolamento entre clientes.
 
 O desafio, portanto, não é simplesmente encontrar um lugar para guardar milhões de documentos.
 
@@ -336,9 +324,7 @@ Em uma evolução futura, o **AWS KMS** poderá ser incorporado para proporciona
 
 O resultado é uma arquitetura que busca equilibrar **segurança, escalabilidade, resiliência, preservação histórica, experiência do usuário e sustentabilidade dos custos**.
 
-Ao utilizar serviços gerenciados e serverless, a solução também reduz a dependência de componentes individuais administrados pela equipe.
-
-Dessa forma, a arquitetura pode se beneficiar dos mecanismos de disponibilidade e tolerância a falhas oferecidos pelos serviços AWS utilizados, mantendo o foco da equipe na evolução da aplicação e nas necessidades do negócio.
+Ao utilizar serviços gerenciados e serverless, a solução também reduz a dependência de componentes individuais administrados pela equipe, beneficiando-se dos mecanismos de disponibilidade e tolerância a falhas oferecidos pelos serviços AWS utilizados.
 
 ---
 
@@ -364,9 +350,7 @@ Dessa forma, a arquitetura pode se beneficiar dos mecanismos de disponibilidade 
 
 ## Jornada do Cliente
 
-A arquitetura técnica mostra como os serviços se conectam.
-
-Entretanto, para compreender a solução sob a perspectiva de quem utiliza a plataforma, também desenvolvemos uma visão focada na **Jornada do Cliente**.
+A arquitetura técnica mostra como os serviços se conectam. Entretanto, para compreender a solução sob a perspectiva de quem utiliza a plataforma, também desenvolvemos uma visão focada na **Jornada do Cliente**.
 
 Essa jornada representa o caminho percorrido pelo usuário desde o acesso à plataforma até a preservação histórica de seus documentos.
 
@@ -386,19 +370,13 @@ Nesse momento, o objetivo é proporcionar uma experiência simples ao usuário s
 
 Após o envio, o documento é associado à conta do cliente e armazenado de forma segura.
 
-Quando o usuário deseja consultar ou baixar um arquivo, a plataforma verifica sua identidade e suas permissões antes de liberar o acesso.
-
-Dessa forma, o cliente não recebe acesso irrestrito ao ambiente de armazenamento.
-
-O acesso é concedido somente ao documento solicitado e de forma controlada.
+Quando o usuário deseja consultar ou baixar um arquivo, a plataforma verifica sua identidade e suas permissões antes de liberar o acesso. O cliente não recebe acesso irrestrito ao ambiente de armazenamento — o acesso é concedido somente ao documento solicitado e de forma controlada.
 
 ### 3. Preservação histórica
 
 Com o passar do tempo, os documentos continuam preservados como parte do histórico da empresa.
 
-Durante os primeiros 12 meses, os arquivos permanecem em uma classe adequada ao acesso frequente.
-
-Após esse período, a estratégia de ciclo de vida permite realizar a transição para uma classe de armazenamento histórico de menor custo, mantendo os documentos preservados para futuras necessidades do negócio.
+Durante os primeiros 12 meses, os arquivos permanecem em uma classe adequada ao acesso frequente. Após esse período, a estratégia de ciclo de vida permite realizar a transição para uma classe de armazenamento histórico de menor custo, mantendo os documentos preservados para futuras necessidades do negócio.
 
 Essa visão reforça um dos princípios centrais do projeto:
 
@@ -419,11 +397,8 @@ A visão técnica da solução apresenta os serviços AWS utilizados e o fluxo p
 A arquitetura foi projetada para responder diretamente aos principais desafios identificados pela Startup Jarva's.
 
 - **Segurança e isolamento:** a autenticação pelo Amazon Cognito, as validações realizadas pela aplicação e o uso de URLs pré-assinadas permitem controlar o acesso aos documentos sem expor diretamente o ambiente de armazenamento.
-
 - **Retenção e preservação histórica:** o Amazon S3 oferece uma base durável para o armazenamento dos documentos, enquanto o S3 Object Lock contribui para protegê-los contra exclusões ou alterações durante o período de retenção definido.
-
 - **Crescimento e escalabilidade:** a utilização de serviços serverless e gerenciados permite que a solução acompanhe o aumento no número de usuários e documentos sem depender de servidores administrados individualmente pela equipe.
-
 - **Controle de custos:** o S3 Lifecycle permite adaptar o armazenamento ao ciclo de vida dos documentos, mantendo arquivos recentes disponíveis para acesso frequente e transferindo documentos históricos para classes de menor custo.
 
 Dessa forma, a arquitetura transforma os principais desafios do negócio em decisões técnicas, buscando equilibrar **segurança, acesso, preservação histórica, escalabilidade e sustentabilidade dos custos**.
@@ -453,25 +428,17 @@ Além do fluxo principal, a arquitetura incorpora mecanismos de observabilidade,
 
 Além de segurança e escalabilidade, a arquitetura também foi pensada para reduzir a dependência de componentes individuais que poderiam representar pontos únicos de falha.
 
-Uma das principais decisões da Fase 01 foi utilizar uma arquitetura baseada em serviços **serverless e gerenciados pela AWS**.
-
-Isso significa que a equipe não precisa depender de um único servidor, máquina virtual ou instância para manter o funcionamento da aplicação.
+Uma das principais decisões da Fase 01 foi utilizar uma arquitetura baseada em serviços **serverless e gerenciados pela AWS**. Isso significa que a equipe não precisa depender de um único servidor, máquina virtual ou instância para manter o funcionamento da aplicação.
 
 Os principais componentes da solução, como **Amazon Cognito**, **Amazon API Gateway**, **AWS Lambda**, **Amazon DynamoDB** e **Amazon S3**, são serviços gerenciados que operam sobre uma infraestrutura fornecida pela AWS.
 
-Dessa forma, a aplicação não depende de uma única Zona de Disponibilidade configurada manualmente pela equipe para executar seu fluxo principal.
-
-A responsabilidade pela infraestrutura subjacente e pela disponibilidade dos serviços é compartilhada com a AWS de acordo com as características e os acordos de nível de serviço de cada serviço.
+Dessa forma, a aplicação não depende de uma única Zona de Disponibilidade configurada manualmente pela equipe para executar seu fluxo principal. A responsabilidade pela infraestrutura subjacente e pela disponibilidade dos serviços é compartilhada com a AWS de acordo com as características e os acordos de nível de serviço de cada serviço.
 
 ### O que acontece se um componente falhar?
 
-A arquitetura foi projetada para reduzir o impacto de falhas relacionadas à infraestrutura de componentes individuais.
+A arquitetura foi projetada para reduzir o impacto de falhas relacionadas à infraestrutura de componentes individuais. Por exemplo, não existe uma única instância EC2 responsável por processar todas as solicitações da plataforma.
 
-Por exemplo, não existe uma única instância EC2 responsável por processar todas as solicitações da plataforma.
-
-A lógica da aplicação é executada pelo **AWS Lambda**, enquanto os documentos e metadados são armazenados em serviços gerenciados como **Amazon S3** e **Amazon DynamoDB**.
-
-Essa abordagem reduz o risco de que a falha de um único servidor administrado pela aplicação interrompa completamente o sistema.
+A lógica da aplicação é executada pelo **AWS Lambda**, enquanto os documentos e metadados são armazenados em serviços gerenciados como **Amazon S3** e **Amazon DynamoDB**. Essa abordagem reduz o risco de que a falha de um único servidor administrado pela aplicação interrompa completamente o sistema.
 
 Entretanto, é importante destacar que:
 
@@ -491,7 +458,7 @@ Dessa forma, a resiliência é tratada como um princípio presente desde a conce
 
 ---
 
-# Arquitetura, AWS CAF e AWS Well-Architected Framework
+## Arquitetura, AWS CAF e AWS Well-Architected Framework
 
 A construção da solução foi orientada por boas práticas de arquitetura em nuvem, considerando princípios do **AWS Cloud Adoption Framework (AWS CAF)** e do **AWS Well-Architected Framework**.
 
@@ -526,9 +493,7 @@ Como parte da evolução da solução, identificamos alguns pontos que podem ser
 
 Essas melhorias não são necessárias para que a arquitetura inicial atenda aos requisitos definidos, mas representam oportunidades para elevar o nível de segurança, governança, resiliência e maturidade operacional da plataforma conforme o negócio cresça.
 
-A Fase 02 não representa uma substituição da arquitetura atual.
-
-Ela parte da base construída na Fase 01 e avalia quais novos recursos e estratégias passam a fazer sentido à medida que aumentam o número de usuários, o volume de documentos, a criticidade da operação e a sensibilidade dos dados armazenados.
+A Fase 02 não representa uma substituição da arquitetura atual. Ela parte da base construída na Fase 01 e avalia quais novos recursos e estratégias passam a fazer sentido à medida que aumentam o número de usuários, o volume de documentos, a criticidade da operação e a sensibilidade dos dados armazenados.
 
 ### 🔐 Fase 02 — Evolução da Segurança e Governança
 
@@ -544,9 +509,7 @@ Os serviços avaliados para esta etapa são:
 
 A adoção desses serviços deve ser avaliada considerando o crescimento da plataforma, o nível de sensibilidade dos documentos armazenados e o impacto financeiro de sua utilização.
 
-A proposta não é adicionar serviços simplesmente para aumentar a quantidade de componentes da arquitetura.
-
-Cada recurso deve ser incorporado quando houver uma necessidade concreta que justifique seu uso, considerando segurança, governança, complexidade operacional e custo.
+Cada recurso deve ser incorporado quando houver uma necessidade concreta que justifique seu uso, considerando segurança, governança, complexidade operacional e custo — não como forma de simplesmente aumentar a quantidade de componentes da arquitetura.
 
 ### 🚀 Como a solução pode evoluir?
 
@@ -577,9 +540,7 @@ Entre as possibilidades de evolução estão:
 - **Escalabilidade:** evolução da arquitetura para suportar um aumento significativo no número de usuários e documentos sem depender de componentes individuais que limitem o crescimento.
 - **Otimização de custos:** revisão contínua das estratégias de armazenamento e utilização dos serviços conforme o comportamento real da aplicação.
 
-Essas melhorias não precisam necessariamente ser implementadas na primeira versão da solução.
-
-O objetivo desta etapa é demonstrar que a arquitetura foi pensada não apenas para atender ao cenário atual, mas também para permitir uma evolução consistente conforme o negócio cresça.
+Essas melhorias não precisam necessariamente ser implementadas na primeira versão da solução. O objetivo desta etapa é demonstrar que a arquitetura foi pensada não apenas para atender ao cenário atual, mas também para permitir uma evolução consistente conforme o negócio cresça.
 
 > **A Fase 01 resolve o problema atual. A Fase 02 prepara a arquitetura para os desafios que surgem com o crescimento e a maturidade da plataforma.**
 
@@ -653,7 +614,6 @@ Dessa forma, a arquitetura deixa de existir apenas como um diagrama conceitual e
 ### 🔗 Acesse o código da infraestrutura
 
 [infrastructure.yaml](https://github.com/lbarretto/jarvas-aws-architecture/blob/main/infrastructure.yaml)
-
 
 ---
 
