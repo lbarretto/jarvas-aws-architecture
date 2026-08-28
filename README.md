@@ -2,7 +2,7 @@
 
 <!-- CAPA DO PROJETO -->
 <p align="center">
-  <img src="./assets/cover.png" alt="Capa do projeto Startup Jarva's">
+  <img width="1536" height="1024" alt="Image" src="https://github.com/user-attachments/assets/660d24a3-b512-41c7-ab08-00363b4d7161" />
 </p>
 
 > **Projeto desenvolvido como parte do desafio proposto pela Escola da Nuvem para aplicação prática dos conhecimentos em AWS Cloud e arquitetura de soluções em nuvem.**
@@ -33,7 +33,6 @@
   - [Evolução e Visão de Futuro — Fase 02](#evolução-e-visão-de-futuro--fase-02)
 - [6. Como o projeto foi desenvolvido](#6-como-o-projeto-foi-desenvolvido)
 - [7. Infraestrutura como Código](#7-infraestrutura-como-código)
-  - [Guia de como testar a aplicação](#guia-de-como-testar-a-aplicação)
 - [8. Agradecimentos](#8-agradecimentos)
 - [9. Referências](#9-referências)
 
