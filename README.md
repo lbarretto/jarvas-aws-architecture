@@ -2,7 +2,7 @@
 
 <!-- CAPA DO PROJETO -->
 <p align="center">
-  <img width="1536" height="1024" alt="Image" src="https://github.com/user-attachments/assets/660d24a3-b512-41c7-ab08-00363b4d7161" />
+  <img width="1672" height="940" alt="Image" src="https://github.com/user-attachments/assets/dc2e1360-263c-47af-b3fc-912f140d9fa7" />
 </p>
 
 > **Projeto desenvolvido como parte do desafio proposto pela Escola da Nuvem para aplicação prática dos conhecimentos em AWS Cloud e arquitetura de soluções em nuvem.**
