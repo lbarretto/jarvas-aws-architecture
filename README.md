@@ -93,6 +93,8 @@ O projeto, portanto, representa um problema cada vez mais relevante:
 
 > **Como construir uma infraestrutura capaz de transformar o crescimento da quantidade de dados em um ativo estratégico, sem comprometer segurança, disponibilidade e sustentabilidade financeira?**
 
+<img width="1376" height="768" alt="Image" src="https://github.com/user-attachments/assets/cf38ec2f-b4db-4055-991c-67868188a3ac" />
+
 ---
 
 # 2. Contextualização do Projeto
