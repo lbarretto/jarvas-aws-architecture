@@ -9,32 +9,43 @@
 
 ---
 
-## 📌 Sumário
+<details open>
+<summary><h2>📌 Sumário</h2></summary>
 
-- [1. Contextualização do TCC](#1-contextualização-do-tcc)
-  - [O que é o projeto?](#o-que-é-o-projeto)
-  - [Por que acreditamos que seja um tema relevante?](#por-que-acreditamos-que-seja-um-tema-relevante)
-- [2. Contextualização do Projeto](#2-contextualização-do-projeto)
-- [3. Problema a ser resolvido e impacto no negócio](#3-problema-a-ser-resolvido-e-impacto-no-negócio)
-  - [Segurança e isolamento dos dados](#segurança-e-isolamento-dos-dados)
-  - [Retenção dos documentos](#retenção-dos-documentos)
-  - [Custo de armazenamento](#custo-de-armazenamento)
-  - [O dilema central](#o-dilema-central)
-- [4. Requisitos de projeto e para a solução](#4-requisitos-de-projeto-e-para-a-solução)
-- [5. Solução](#5-solução)
-  - [Da necessidade à solução](#da-necessidade-à-solução)
-  - [Visão geral da solução](#visão-geral-da-solução)
-  - [Serviços AWS utilizados](#serviços-aws-utilizados)
-  - [Jornada do Cliente](#jornada-do-cliente)
-  - [Arquitetura AWS](#arquitetura-aws)
-  - [Resiliência e tolerância a falhas](#resiliência-e-tolerância-a-falhas)
-  - [Arquitetura, AWS CAF e AWS Well-Architected Framework](#arquitetura-aws-caf-e-aws-well-architected-framework)
-  - [Custos do projeto](#custos-do-projeto)
-  - [Evolução e Visão de Futuro — Fase 02](#evolução-e-visão-de-futuro--fase-02)
-- [6. Como o projeto foi desenvolvido](#6-como-o-projeto-foi-desenvolvido)
-- [7. Infraestrutura como Código](#7-infraestrutura-como-código)
-- [8. Agradecimentos](#8-agradecimentos)
-- [9. Referências](#9-referências)
+### 1️⃣ [Contextualização do TCC](#1-contextualização-do-tcc)
+- [O que é o projeto?](#o-que-é-o-projeto)
+- [Por que acreditamos que seja um tema relevante?](#por-que-acreditamos-que-seja-um-tema-relevante)
+
+### 2️⃣ [Contextualização do Projeto](#2-contextualização-do-projeto)
+
+### 3️⃣ [Problema a ser resolvido e impacto no negócio](#3-problema-a-ser-resolvido-e-impacto-no-negócio)
+- [Segurança e isolamento dos dados](#segurança-e-isolamento-dos-dados)
+- [Retenção dos documentos](#retenção-dos-documentos)
+- [Custo de armazenamento](#custo-de-armazenamento)
+- [O dilema central](#o-dilema-central)
+
+### 4️⃣ [Requisitos de projeto e para a solução](#4-requisitos-de-projeto-e-para-a-solução)
+
+### 5️⃣ [Solução](#5-solução)
+- [Da necessidade à solução](#da-necessidade-à-solução)
+- [Visão geral da solução](#visão-geral-da-solução)
+- [Serviços AWS utilizados](#serviços-aws-utilizados)
+- [Jornada do Cliente](#jornada-do-cliente)
+- [Arquitetura AWS](#arquitetura-aws)
+- [Resiliência e tolerância a falhas](#resiliência-e-tolerância-a-falhas)
+- [Arquitetura, AWS CAF e AWS Well-Architected Framework](#arquitetura-aws-caf-e-aws-well-architected-framework)
+- [Custos do projeto](#custos-do-projeto)
+- [Evolução e Visão de Futuro — Fase 02](#evolução-e-visão-de-futuro--fase-02)
+
+### 6️⃣ [Como o projeto foi desenvolvido](#6-como-o-projeto-foi-desenvolvido)
+
+### 7️⃣ [Infraestrutura como Código](#7-infraestrutura-como-código)
+
+### 8️⃣ [Agradecimentos](#8-agradecimentos)
+
+### 9️⃣ [Referências](#9-referências)
+
+</details>
 
 ---
 
