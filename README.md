@@ -656,7 +656,7 @@ Agradecemos à **Escola da Nuvem**, aos professores, mentores e a todos os integ
 <!-- ESPAÇO RESERVADO PARA FOTO DO GRUPO -->
 
 <p align="center">
-  <em>Foto da equipe em breve.</em>
+  <em><img width="1196" height="896" alt="Image" src="https://github.com/user-attachments/assets/d8629eb0-3388-4bfa-9cb1-b7780856db12" /></em>
 </p>
 
 ---
