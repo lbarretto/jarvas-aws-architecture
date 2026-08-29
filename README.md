@@ -946,28 +946,50 @@ A relação da arquitetura com esses princípios pode ser resumida assim:
 
 ---
 
+## 💰 Custos do projeto
 
+A arquitetura foi projetada não apenas para atender aos requisitos técnicos da Startup Jarva's, mas também para manter os custos compatíveis com o crescimento da plataforma.
 
-## Custos do projeto
+Considerando um cenário de aproximadamente **50.000 novos documentos por mês**, a estimativa da Fase 01 resulta em:
 
+| Indicador | Estimativa |
+|---|---:|
+| 💵 **Custo mensal recorrente** | **US$ 143,54** |
+| 🧾 **Custo inicial** | **US$ 33,00** |
+| 📅 **Projeção em 12 meses** | **US$ 1.755,48** |
+| 📄 **Custo por documento/mês** | **US$ 0,0029** |
 
+> 💡 **Em outras palavras:** a arquitetura consegue processar aproximadamente **50 mil documentos por mês** com um custo recorrente inferior a **US$ 0,003 por documento**, demonstrando um baixo custo marginal por unidade processada.
 
-> 🚧 **Em desenvolvimento**
->
-> Nesta seção serão apresentados os custos estimados da solução, as principais variáveis que influenciam o consumo dos serviços AWS e a estratégia adotada para acompanhar e otimizar os gastos da infraestrutura.
+### 📊 Onde está concentrado o custo?
 
+A maior parte do custo está relacionada ao **armazenamento e à transferência dos documentos**, e não à capacidade computacional.
 
+- 🗄️ **Amazon S3 Intelligent-Tiering:** US$ 65,63/mês
+- 🌐 **Transferência de dados:** US$ 61,44/mês
+- ❄️ **S3 Glacier Deep Archive:** US$ 8,42/mês
+- 📊 **Amazon CloudWatch:** US$ 6,18/mês
+- ⚙️ **Demais serviços:** impacto inferior a 1% ou custo estimado de US$ 0,00 na escala analisada
 
-A arquitetura da Fase 01 também busca evitar custos adicionais associados a recursos que não sejam necessários para atender aos requisitos atuais do problema.
+Essa distribuição reforça uma das principais decisões arquiteturais do projeto: **o custo deve acompanhar o ciclo de vida e o comportamento dos dados**.
 
+Documentos recentes permanecem em uma camada adequada ao acesso frequente, enquanto documentos históricos podem ser direcionados para armazenamento de longo prazo e menor custo.
 
+### 📈 Estratégia de otimização
 
-Por esse motivo, a transferência dos arquivos é realizada utilizando o endpoint padrão do Amazon S3 e URLs pré-assinadas. Recursos adicionais de otimização de transferência poderão ser avaliados futuramente caso métricas reais da aplicação indiquem uma necessidade concreta.
+A arquitetura evita adicionar serviços ou mecanismos de otimização sem uma necessidade concreta.
 
+Um exemplo é o **S3 Transfer Acceleration**. Embora possa melhorar a experiência de transferência em cenários de expansão geográfica, sua adoção aumentaria significativamente os custos estimados. Por isso, foi mantido como uma possibilidade de evolução da **Fase 02**, e não como componente obrigatório da Fase 01.
 
+> **A estratégia adotada é simples: adicionar complexidade e custo somente quando o crescimento real da plataforma justificar o investimento.**
 
-Essa abordagem permite que a arquitetura evolua de acordo com o crescimento da plataforma, evitando antecipar custos e complexidade antes que exista um benefício claro para o negócio.
+### 📄 Detalhamento da precificação
 
+A estimativa completa, incluindo as premissas utilizadas, cálculo das leituras, custos por serviço, projeção de 12 meses, níveis de gratuidade e análise do impacto do S3 Transfer Acceleration, está disponível no documento:
+
+👉 **[📄 Precificação Serviços AWS - Startup Jarva's](./Precificação%20Serviços%20AWS%20-%20Startup%20Jarva's.md)**
+
+> *Estimativa elaborada com base na AWS Pricing Calculator, utilizando a região Leste dos EUA (N. da Virgínia). Os valores representam uma projeção baseada nas premissas do cenário e podem variar conforme o comportamento real da aplicação e alterações nos preços dos serviços AWS.*
 
 
 ---
