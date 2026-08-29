@@ -948,6 +948,8 @@ A relação da arquitetura com esses princípios pode ser resumida assim:
 
 ## 💰 Custos do projeto
 
+<img width="1376" height="768" alt="Image" src="https://github.com/user-attachments/assets/c5877632-d50d-452d-8545-5b1f6229f31a" />
+
 A arquitetura foi projetada não apenas para atender aos requisitos técnicos da Startup Jarva's, mas também para manter os custos compatíveis com o crescimento da plataforma.
 
 Considerando um cenário de aproximadamente **50.000 novos documentos por mês**, a estimativa da Fase 01 resulta em:
