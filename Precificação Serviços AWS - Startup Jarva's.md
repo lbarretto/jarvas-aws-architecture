@@ -2,7 +2,8 @@
 
 <!-- CAPA DA PRECIFICAÇÃO -->
 <p align="center">
-  <em></em>
+  <em><img width="1536" height="1024" alt="0e7e98cf-840c-41ae-b57c-9f8c51e151b5" src="https://github.com/user-attachments/assets/8affc000-d07d-45e9-be37-47f937b7fb54" />
+</em>
 </p>
 
 > **Justificativa técnica e financeira da arquitetura AWS da Fase 01 — Plataforma SaaS de Gestão de Documentos com IA — com base em uma estimativa oficial da AWS Pricing Calculator.**
