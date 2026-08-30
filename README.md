@@ -434,7 +434,7 @@ Essa visão reforça um dos princípios centrais do projeto:
 A visão técnica da solução apresenta os serviços AWS utilizados e o fluxo principal de comunicação entre os componentes da arquitetura.
 
 <p align="center">
-  <img width="1536" height="1024" alt="Diagrama da Arquitetura AWS" src="https://github.com/user-attachments/assets/c6e01133-3ff4-47ea-a31e-51e20c45e4ea" />
+  <img width="1530" height="1028" alt="Image" src="https://github.com/user-attachments/assets/45bfedc5-69a8-448e-8bc6-2924ac69a226" />
 </p>
 
 ### 🔍 Como a arquitetura resolve o problema?
