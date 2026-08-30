@@ -505,6 +505,10 @@ Dessa forma, a resiliência é tratada como um princípio presente desde a conce
 
 ## 🧭 Arquitetura, AWS CAF e AWS Well-Architected Framework
 
+<p align="center">
+  <img width="1376" height="768" alt="Image" src="https://github.com/user-attachments/assets/5ae1c337-4dae-42c0-8340-45ca05c827a4" />
+</p>
+
 A construção da solução foi orientada por boas práticas de arquitetura em nuvem, considerando princípios do [AWS Cloud Adoption Framework (AWS CAF)](https://aws.amazon.com/pt/cloud-adoption-framework/) e do [AWS Well-Architected Framework](https://aws.amazon.com/pt/architecture/well-architected/).
 
 O AWS CAF ajuda a analisar a adoção da nuvem de forma ampla, relacionando a arquitetura às necessidades do negócio, à segurança, à operação e à gestão dos recursos. Já o AWS Well-Architected Framework oferece princípios técnicos para avaliar se a arquitetura está sendo construída de forma segura, confiável, eficiente e sustentável.
