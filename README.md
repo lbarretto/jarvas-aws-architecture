@@ -29,38 +29,38 @@
 <details open>
 <summary><h2>📌 Sumário</h2></summary>
 
-### 1️⃣ [Contextualização do TCC](#1-contextualização-do-tcc)
-- 1.1 💡 [O que é o projeto?](#-o-que-é-o-projeto)
-- 1.2 📊 [Por que acreditamos que seja um tema relevante?](#-por-que-acreditamos-que-seja-um-tema-relevante)
+- [1️⃣ Contextualização do TCC](#secao-1-contextualizacao-do-tcc)
+  - [1.1 💡 O que é o projeto?](#secao-11-o-que-e-o-projeto)
+  - [1.2 📊 Por que acreditamos que seja um tema relevante?](#secao-12-por-que-acreditamos-que-seja-um-tema-relevante)
 
-### 2️⃣ [Contextualização do Projeto](#2-contextualização-do-projeto)
+- [2️⃣ Contextualização do Projeto](#secao-2-contextualizacao-do-projeto)
 
-### 3️⃣ [Problema a ser resolvido e impacto no negócio](#3-problema-a-ser-resolvido-e-impacto-no-negócio)
-- 3.1 🔒 [Segurança e isolamento dos dados](#-segurança-e-isolamento-dos-dados)
-- 3.2 🗃️ [Retenção dos documentos](#-retenção-dos-documentos)
-- 3.3 💵 [Custo de armazenamento](#-custo-de-armazenamento)
-- 3.4 ⚖️ [O dilema central](#-o-dilema-central)
+- [3️⃣ Problema a ser resolvido e impacto no negócio](#secao-3-problema-a-ser-resolvido-e-impacto-no-negocio)
+  - [3.1 🔒 Segurança e isolamento dos dados](#secao-31-seguranca-e-isolamento-dos-dados)
+  - [3.2 🗃️ Retenção dos documentos](#secao-32-retencao-dos-documentos)
+  - [3.3 💵 Custo de armazenamento](#secao-33-custo-de-armazenamento)
+  - [3.4 ⚖️ O dilema central](#secao-34-o-dilema-central)
 
-### 4️⃣ [Requisitos de projeto e para a solução](#4-requisitos-de-projeto-e-para-a-solução)
+- [4️⃣ Requisitos de projeto e para a solução](#secao-4-requisitos-de-projeto-e-para-a-solucao)
 
-### 5️⃣ [Solução](#5-solução)
-- 5.1 🧩 [Da necessidade à solução](#-da-necessidade-à-solução)
-- 5.2 🔭 [Visão geral da solução](#-visão-geral-da-solução)
-- 5.3 🛠️ [Serviços AWS utilizados](#-serviços-aws-utilizados)
-- 5.4 🚶 [Jornada do Cliente](#-jornada-do-cliente)
-- 5.5 🏗️ [Arquitetura AWS](#-arquitetura-aws)
-- 5.6 🛡️ [Resiliência e tolerância a falhas](#resiliência-e-tolerância-a-falhas)
-- 5.7 🧭 [Arquitetura, AWS CAF e AWS Well-Architected Framework](#-arquitetura-aws-caf-e-aws-well-architected-framework)
-- 5.8 💰 [Custos do projeto](#-custos-do-projeto)
-- 5.9 🚀 [Evolução e Visão de Futuro — Fase 02](#-evolução-e-visão-de-futuro--fase-02)
+- [5️⃣ Solução](#secao-5-solucao)
+  - [5.1 🧩 Da necessidade à solução](#secao-51-da-necessidade-a-solucao)
+  - [5.2 🔭 Visão geral da solução](#secao-52-visao-geral-da-solucao)
+  - [5.3 🛠️ Serviços AWS utilizados](#secao-53-servicos-aws-utilizados)
+  - [5.4 🚶 Jornada do Cliente](#secao-54-jornada-do-cliente)
+  - [5.5 🏗️ Arquitetura AWS](#secao-55-arquitetura-aws)
+  - [5.6 🛡️ Resiliência e tolerância a falhas](#secao-56-resiliencia-e-tolerancia-a-falhas)
+  - [5.7 🧭 Arquitetura, AWS CAF e AWS Well-Architected Framework](#secao-57-arquitetura-aws-caf-e-aws-well-architected-framework)
+  - [5.8 💰 Custos do projeto](#secao-58-custos-do-projeto)
+  - [5.9 🚀 Evolução e Visão de Futuro — Fase 02](#secao-59-evolucao-e-visao-de-futuro-fase-02)
 
-### 6️⃣ [Como o projeto foi desenvolvido](#6-como-o-projeto-foi-desenvolvido)
+- [6️⃣ Como o projeto foi desenvolvido](#secao-6-como-o-projeto-foi-desenvolvido)
 
-### 7️⃣ [Infraestrutura como Código](#7-infraestrutura-como-código)
+- [7️⃣ Infraestrutura como Código](#secao-7-infraestrutura-como-codigo)
 
-### 8️⃣ [Agradecimentos](#8-agradecimentos)
+- [8️⃣ Agradecimentos](#secao-8-agradecimentos)
 
-### 9️⃣ [Referências](#9-referências)
+- [9️⃣ Referências](#secao-9-referencias)
 
 </details>
 
@@ -378,19 +378,20 @@ Ao utilizar serviços gerenciados e serverless, a solução também reduz a depe
 
 | Serviço | Papel na solução |
 |---|---|
-| 🔑 **Amazon Cognito** | Autenticação e gerenciamento da identidade dos usuários |
-| 🚪 **Amazon API Gateway** | Camada de entrada da API, controle das solicitações e integração com a lógica da aplicação |
-| ⚙️ **AWS Lambda** | Execução da lógica de negócio, validações e geração de URLs pré-assinadas |
-| 🏷️ **Amazon DynamoDB** | Armazenamento dos metadados e informações de propriedade dos documentos |
-| 🗄️ **Amazon S3** | Armazenamento seguro, durável e escalável dos documentos e transferência direta dos arquivos por meio de URLs pré-assinadas |
-| ♻️ **S3 Lifecycle** | Gerenciamento do ciclo de vida e transição dos documentos históricos |
-| ❄️ **S3 Glacier Deep Archive** | Armazenamento histórico de longo prazo para documentos com baixa frequência de acesso |
+| 🔑 **Amazon Cognito** | Autenticação e gerenciamento da identidade dos usuários, incluindo a emissão de tokens JWT utilizados no controle de acesso à aplicação |
+| 🚪 **Amazon API Gateway** | Camada de entrada da API, responsável pelo recebimento das solicitações, validação de autorização e integração com a lógica da aplicação |
+| ⚙️ **AWS Lambda** | Execução da lógica de negócio, validação de identidade e permissões, consulta aos metadados e geração de URLs pré-assinadas |
+| 🏷️ **Amazon DynamoDB** | Armazenamento dos metadados e informações de propriedade dos documentos, apoiando a validação de acesso e autorização |
+| 🗄️ **Amazon S3 Intelligent-Tiering** | Classe de armazenamento utilizada para os documentos durante o período inicial de maior frequência de acesso, ajustando automaticamente as camadas de acesso conforme o padrão de utilização |
+| ♻️ **S3 Lifecycle** | Gerenciamento do ciclo de vida dos documentos e transição automática dos objetos para classes de armazenamento mais adequadas ao longo do tempo |
+| ❄️ **S3 Glacier Deep Archive** | Armazenamento histórico de longo prazo para documentos que precisam ser preservados, mas apresentam baixa frequência de acesso |
 | 🔒 **S3 Object Lock** | Proteção dos objetos contra exclusão ou alteração durante o período de retenção configurado |
-| 🛂 **AWS IAM** | Controle de permissões seguindo o princípio do menor privilégio |
-| 📊 **Amazon CloudWatch** | Monitoramento, métricas, logs e acompanhamento operacional |
+| 🛂 **AWS IAM** | Controle de permissões seguindo o princípio do menor privilégio entre os serviços e recursos da arquitetura |
+| 📊 **Amazon CloudWatch** | Monitoramento operacional por meio de logs, métricas, dashboards e alarmes |
 | 📜 **AWS CloudTrail** | Registro e auditoria das ações realizadas na conta e nos serviços AWS |
-| 🧱 **AWS CloudFormation** | Provisionamento e reprodução da infraestrutura por meio de código |
-
+| 💰 **AWS Budgets** | Definição e acompanhamento de orçamentos, permitindo a criação de alertas relacionados aos custos da infraestrutura |
+| 📈 **AWS Cost Explorer** | Análise dos custos e padrões de utilização dos serviços, apoiando a identificação de tendências e oportunidades de otimização |
+| 🧱 **AWS CloudFormation** | Provisionamento, reprodução e padronização da infraestrutura por meio de código |
 ---
 
 ## 🚶 Jornada do Cliente
