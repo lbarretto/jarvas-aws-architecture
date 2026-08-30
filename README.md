@@ -202,7 +202,7 @@ Por isso, o projeto precisa considerar o **ciclo de vida dos dados**.
 
 Documentos recentes possuem maior frequência de acesso e precisam de disponibilidade imediata, enquanto documentos históricos tendem a ser acessados com menor frequência, embora continuem tendo valor estratégico.
 
-Na arquitetura proposta, os documentos permanecem inicialmente no **Amazon S3 Standard**, adequado ao período de maior frequência de acesso.
+Na arquitetura proposta, os documentos permanecem inicialmente no **Amazon S3 Intelligent-Tiering**, adequado ao período de maior frequência de acesso.
 
 Após os primeiros **12 meses**, uma regra de **S3 Lifecycle** pode realizar a transição automática dos objetos para o **S3 Glacier Deep Archive**, reduzindo o custo de armazenamento dos documentos históricos que continuam precisando ser preservados.
 
@@ -346,7 +346,7 @@ Dessa forma, a arquitetura atende ao requisito de transferência segura dos docu
 
 ### 📦 Estratégia de armazenamento
 
-Durante os primeiros **12 meses**, os documentos permanecem no **Amazon S3 Standard**, atendendo ao requisito de acesso frequente e disponibilidade imediata.
+Durante os primeiros **12 meses**, os documentos permanecem no **Amazon S3 Intelligent-Tiering**, atendendo ao requisito de acesso frequente e disponibilidade imediata.
 
 Após esse período, uma regra de **S3 Lifecycle** pode realizar a transição automática dos objetos para o **S3 Glacier Deep Archive**.
 
@@ -515,7 +515,7 @@ A relação da arquitetura com esses princípios pode ser resumida assim:
 | 🔐 **Segurança** | Autenticação, controle de permissões e validação de propriedade dos documentos | Amazon Cognito, AWS IAM, Amazon API Gateway, AWS Lambda, URLs pré-assinadas, Amazon S3 (criptografia server-side) | Garante que o acesso aos dados seja controlado e limitado às operações autorizadas. Na Fase 02, o AWS KMS poderá ampliar o controle sobre as chaves criptográficas. |
 | 📈 **Escalabilidade e performance** | Acompanhar a demanda sem depender de uma única máquina | Amazon API Gateway, AWS Lambda, Amazon DynamoDB, Amazon S3 | Serviços serverless e gerenciados oferecem uma base capaz de acompanhar o crescimento da aplicação. As transferências são realizadas diretamente com o Amazon S3 por meio de URLs pré-assinadas. |
 | 🛡️ **Confiabilidade e resiliência** | Reduzir a dependência de componentes individuais administrados pela equipe | Amazon Cognito, Amazon API Gateway, AWS Lambda, Amazon DynamoDB, Amazon S3, Amazon CloudWatch, infraestrutura como código | Apoia-se em infraestrutura gerenciada pela AWS, reduzindo pontos únicos de falha. O CloudWatch monitora o comportamento operacional e a IaC garante reprodução consistente do ambiente. |
-| 🗂️ **Durabilidade e preservação histórica** | Armazenamento durável e preservação do histórico de documentos | Amazon S3, S3 Lifecycle, S3 Glacier Deep Archive, S3 Object Lock | Documentos ficam no S3 Standard nos primeiros 12 meses e depois migram para o Glacier Deep Archive, reduzindo custos sem eliminá-los. O Object Lock protege contra exclusão ou alteração durante a retenção. |
+| 🗂️ **Durabilidade e preservação histórica** | Armazenamento durável e preservação do histórico de documentos | Amazon S3, S3 Lifecycle, S3 Glacier Deep Archive, S3 Object Lock | Documentos ficam no Amazon S3 Intelligent-Tiering nos primeiros 12 meses e depois migram para o Glacier Deep Archive, reduzindo custos sem eliminá-los. O Object Lock protege contra exclusão ou alteração durante a retenção. |
 | 💰 **Otimização de custos** | Adequar os recursos ao comportamento real da aplicação e ao padrão de acesso dos dados | S3 Lifecycle, S3 Glacier Deep Archive, serviços serverless | Documentos recentes ficam em classe de acesso frequente e migram para armazenamento histórico após 12 meses. A arquitetura evita adicionar serviços que não atendam a uma necessidade concreta do cenário atual. |
 | 📊 **Excelência operacional** | Monitoramento, auditoria e reprodutibilidade da infraestrutura | Amazon CloudWatch, AWS CloudTrail, AWS CloudFormation | CloudWatch acompanha logs, métricas e alarmes; CloudTrail registra ações para auditoria e governança; CloudFormation permite provisionar e reproduzir a infraestrutura como código. |
 
