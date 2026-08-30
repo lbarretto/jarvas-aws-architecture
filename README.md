@@ -7,6 +7,11 @@
 
 <br/>
 
+[![🇧🇷 Português](https://img.shields.io/badge/🇧🇷-Português-009c3b?style=for-the-badge)](./README.md)
+[![🇺🇸 English](https://img.shields.io/badge/🇺🇸-English-lightgrey?style=for-the-badge)](./README.en.md)
+
+<br/>
+
 [![AWS](https://img.shields.io/badge/AWS-Cloud%20Architecture-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)](#5-solução)
 [![Serverless](https://img.shields.io/badge/Arquitetura-Serverless-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)](#5-solução)
 [![IaC](https://img.shields.io/badge/IaC-CloudFormation-527FFF?style=for-the-badge&logo=amazonaws&logoColor=white)](#7-infraestrutura-como-código)
