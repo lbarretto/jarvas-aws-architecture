@@ -63,9 +63,11 @@
 
 - [7️⃣ Infraestrutura como Código](#7-infraestrutura-como-código)
 
-- [8️⃣ Agradecimentos](#8-agradecimentos)
+- [8️⃣ Vídeo de Apresentação](#8--vídeo-de-apresentação)
 
-- [9️⃣ Referências](#9-referências)
+- [9️⃣ Agradecimentos](#9-agradecimentos)
+
+- [🔟 Referências](#10-referências)
 
 </details>
 
@@ -740,8 +742,19 @@ Dessa forma, a arquitetura deixa de existir apenas como um diagrama conceitual e
 [![Ver infrastructure.yaml](https://img.shields.io/badge/CloudFormation-infrastructure.yaml-527FFF?style=for-the-badge&logo=amazonaws&logoColor=white)](https://github.com/lbarretto/jarvas-aws-architecture/blob/main/infrastructure.yaml)
 
 ---
+## 8. 🎬 Vídeo de Apresentação
 
-# 8. Agradecimentos
+Para complementar a documentação escrita, gravamos um vídeo de apresentação do projeto, no qual explicamos o contexto do desafio, os principais problemas identificados e a arquitetura da solução proposta.
+
+<div align="center">
+
+[![Assista ao vídeo de apresentação](https://img.shields.io/badge/▶️-Assistir%20no%20YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/4kUy7GKyM3A)
+
+</div>
+
+---
+
+# 9. Agradecimentos
 
 Este projeto foi construído de forma colaborativa como parte de uma jornada de aprendizado e aplicação prática dos conhecimentos adquiridos durante a preparação em computação em nuvem.
 
@@ -753,7 +766,7 @@ Agradecemos à **Escola da Nuvem**, aos professores, mentores e a todos os integ
 
 ---
 
-# 9. Referências
+# 10. Referências
 
 **1. Amazon S3 — Block Public Access**
 Configurações de bloqueio de acesso público e como essas configurações podem impedir políticas ou permissões que permitiriam acesso público aos objetos.
