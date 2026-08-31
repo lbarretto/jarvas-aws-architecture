@@ -761,7 +761,7 @@ Este projeto foi construído de forma colaborativa como parte de uma jornada de 
 Agradecemos à **Escola da Nuvem**, aos professores, mentores e a todos os integrantes da equipe que contribuíram com análises, ideias e diferentes perspectivas ao longo do desenvolvimento do projeto.
 
 <p align="center">
-  <em><img width="1196" height="896" alt="Foto do grupo" src="https://github.com/user-attachments/assets/d8629eb0-3388-4bfa-9cb1-b7780856db12" /></em>
+  <em><img width="1196" height="892" alt="Image" src="https://github.com/user-attachments/assets/7d9b668e-a836-4cfd-a797-54402378410d" /></em>
 </p>
 
 ---
