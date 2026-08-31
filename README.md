@@ -742,7 +742,7 @@ Dessa forma, a arquitetura deixa de existir apenas como um diagrama conceitual e
 [![Ver infrastructure.yaml](https://img.shields.io/badge/CloudFormation-infrastructure.yaml-527FFF?style=for-the-badge&logo=amazonaws&logoColor=white)](https://github.com/lbarretto/jarvas-aws-architecture/blob/main/infrastructure.yaml)
 
 ---
-## 8. 🎬 Vídeo de Apresentação
+# 8. 🎬 Vídeo de Apresentação
 
 Para complementar a documentação escrita, gravamos um vídeo de apresentação do projeto, no qual explicamos o contexto do desafio, os principais problemas identificados e a arquitetura da solução proposta.
 
