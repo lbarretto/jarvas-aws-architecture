@@ -41,7 +41,7 @@
 - [2️⃣ Project Context](#2-project-context)
 
 - [3️⃣ Problem to be solved and business impact](#3-problem-to-be-solved-and-business-impact)
-  - [3.1 🔒 Security and data isolation](#-security-and-data-isolation)
+  - [3.1 🔒 Data security and isolation](#-data-security-and-isolation)
   - [3.2 🗃️ Document retention](#️-document-retention)
   - [3.3 💵 Storage cost](#-storage-cost)
   - [3.4 ⚖️ The central dilemma](#️-the-central-dilemma)
@@ -63,9 +63,11 @@
 
 - [7️⃣ Infrastructure as Code](#7-infrastructure-as-code)
 
-- [8️⃣ Acknowledgments](#8-acknowledgments)
+- [8️⃣ Presentation Video](#8--presentation-video)
 
-- [9️⃣ References](#9-references)
+- [9️⃣ Acknowledgments](#9-acknowledgments)
+
+- [🔟 References](#10-references)
 
 </details>
 
@@ -740,8 +742,19 @@ This way, the architecture no longer exists only as a conceptual diagram and can
 [![View infrastructure.yaml](https://img.shields.io/badge/CloudFormation-infrastructure.yaml-527FFF?style=for-the-badge&logo=amazonaws&logoColor=white)](https://github.com/lbarretto/jarvas-aws-architecture/blob/main/infrastructure.yaml)
 
 ---
+# 8.🎬 Presentation Video
 
-# 8. Acknowledgments
+To complement the written documentation, we recorded a presentation video of the project, in which we explain the context of the challenge, the main problems identified, and the architecture of the proposed solution.
+
+<div align="center">
+
+[![Watch the presentation video](https://img.shields.io/badge/▶️-Watch%20on%20YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/4kUy7GKyM3A)
+
+</div>
+
+---
+
+# 9. Acknowledgments
 
 This project was built collaboratively as part of a learning journey and the practical application of knowledge acquired during our cloud computing preparation.
 
@@ -753,7 +766,7 @@ We would like to thank **Escola da Nuvem**, the teachers, mentors, and all team 
 
 ---
 
-# 9. References
+# 10. References
 
 **1. Amazon S3 — Block Public Access**
 Public access blocking settings and how these settings can prevent policies or permissions that would allow public access to objects.
