@@ -744,7 +744,7 @@ Dessa forma, a arquitetura deixa de existir apenas como um diagrama conceitual e
 ---
 # 8. 🎬 Vídeo de Apresentação
 
-Para complementar a documentação escrita, gravamos um vídeo de apresentação do projeto, no qual explicamos o contexto do desafio, os principais problemas identificados e a arquitetura da solução proposta.
+Para complementar a documentação escrita, geramos um vídeo de apresentação do projeto, no qual explicamos o contexto do desafio, os principais problemas identificados e a arquitetura da solução proposta.
 
 <div align="center">
 
