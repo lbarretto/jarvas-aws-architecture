@@ -769,7 +769,7 @@ This project was collaboratively developed as part of a learning journey and the
 We would like to thank **Escola da Nuvem**, the instructors, mentors, and all team members who contributed analyses, ideas, and different perspectives throughout the development of the project.
 
 <p align="center">
-  <em><img width="1196" height="896" alt="Group photo" src="https://github.com/user-attachments/assets/d8629eb0-3388-4bfa-9cb1-b7780856db12" /></em>
+  <em><img width="1196" height="892" alt="Image" src="https://github.com/user-attachments/assets/7d9b668e-a836-4cfd-a797-54402378410d" /></em>
 </p>
 
 ---
