@@ -752,7 +752,7 @@ In this way, the architecture no longer exists only as a conceptual diagram and 
 
 # 8. 🎬 Presentation Video
 
-To complement the written documentation, we recorded a project presentation video in which we explain the challenge context, the main problems identified, and the proposed solution architecture.
+To complement the written documentation, we created a project presentation video in which we explain the challenge context, the main problems identified, and the proposed solution architecture.
 
 <div align="center">
 
